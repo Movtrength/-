@@ -40,11 +40,11 @@ summary{cursor:pointer;color:var(--ink3);font-size:13px;font-weight:700}
   <h1>지금 답할 것 — 이 파란 칸만</h1>
   <p class="sub" style="margin:0 0 10px">입력칸은 채우지 마세요. 채팅에만 답하면 됩니다.<br>
   세 줄이 맞으면 <b>승인</b>. 틀리면 <b>그 번호와 고친 한 줄</b>.</p>
-  <div class="sent">닫기의 주인 하나. 공유 · 업로드.</div>
-  <div class="q"><p class="n">1</p>뺀다. 오늘 끝은 영상 · 만족. 누적 칸으로 오늘을 닫지 않는다.</div>
-  <div class="q"><p class="n">2</p>공유 · 만족만 남긴다. 업로드 · 커리어 짝은 쓰지 않는다.</div>
+  <div class="sent">렌즈 1. 주인 하나를 뺐다.</div>
+  <div class="q"><p class="n">1</p>오늘 렌즈 = 만족. 오늘 끝은 영상 · 만족.</div>
+  <div class="q"><p class="n">2</p>렌즈 1은 확인 필요.</div>
   <div class="q"><p class="n">3</p>당신 한 줄로 고친다.</div>
-  <p class="sub" style="margin:10px 0 0">아닌 것: 영상을 커리어 칸에 바로 올리지 않음. 평균하지 않음.</p>
+  <p class="sub" style="margin:10px 0 0">아닌 것: 오늘 렌즈를 커리어로 두지 않음. 평균하지 않음.</p>
 </div>
 
 <p class="sub">아래는 순환 창입니다. 지금 피드백이 아닙니다.</p>
@@ -58,14 +58,14 @@ summary{cursor:pointer;color:var(--ink3);font-size:13px;font-weight:700}
   <ol class="tl">
     <li><b>1. 열기</b>어제 Prediction · 어제 Actual을 받는다. Hypothesis. Next test = 오늘 변수. 오늘 Prediction을 적는다.</li>
     <li><b>2. 오늘</b>판정 · 말 · 영상. 오늘 변수 하나.</li>
-    <li><b>3. 닫기</b>오늘 Actual을 적는다. Exit · 글 · 주인.</li>
+    <li><b>3. 닫기</b>오늘 Actual을 적는다. Exit · 글. 주인 하나를 넣지 않는다.</li>
     <li><b>4. 다음 열기</b>오늘 Prediction → 어제 Prediction. 오늘 Actual → 어제 Actual.</li>
   </ol>
 </div>
 
 <div class="card">
   <h2>잠긴 칸</h2>
-  <p class="sub" style="margin:0">영상 → 만족 → 누적(영상, 만족의 누적) → 커리어. 오늘 영상 · 만족이 쌓인다. 누적 칸으로 오늘을 닫지 않는다. 평균하지 않는다.</p>
+  <p class="sub" style="margin:0">닫기의 주인 하나(공유 · 업로드)는 뺀다. 오늘 끝은 영상 · 만족. 누적 칸으로 오늘을 닫지 않는다.</p>
 </div>
 
 <div class="card">
@@ -95,7 +95,7 @@ summary{cursor:pointer;color:var(--ink3);font-size:13px;font-weight:700}
   <input id="op_today_pred" placeholder="비우지 않음. 모르면 확인 필요">
   <label>확인 필요</label>
   <input id="op_need">
-  <div class="note" id="yestLine">어제 글 · 어제 주인 — Exit가 아님</div>
+  <div class="note" id="yestLine">어제 글 — Exit가 아님</div>
   <div class="note" id="yestPred">어제 Prediction — Actual과 한 줄이 아님</div>
   <button type="button" id="openSave">열기를 남긴다</button>
 </div>
@@ -131,12 +131,6 @@ summary{cursor:pointer;color:var(--ink3);font-size:13px;font-weight:700}
   </div>
   <label>한마디 글 — 목적, 철학 등</label>
   <input id="cl_line">
-  <label>주인 하나</label>
-  <select id="cl_owner">
-    <option value="">확인 필요</option>
-    <option value="share">공유 · 만족</option>
-    <option value="upload">업로드 · 커리어</option>
-  </select>
   <div id="closeList"></div>
   <button type="button" id="closeSave">닫기를 남긴다</button>
 </div>
@@ -151,10 +145,9 @@ const today=()=>new Date().toISOString().slice(0,10);
 const CLOSE=[
   ['K1','변수 하나만 남겼다'],['K2','Fail이면 상향을 찍지 않았다'],['K3','Exit 한 줄을 말했다'],
   ['K4','컷 1.5초 · 6–8 · 최대 12초'],['K5','장면은 그 변수'],['K6','한마디 글'],
-  ['K7','말과 글을 한 줄로 강제하지 않았다'],['K8','주인 하나'],['K9','업무 10분 내외']
+  ['K7','말과 글을 한 줄로 강제하지 않았다'],['K9','업무 10분 내외']
 ];
 function ck(){return 'ontoClose_'+today()}
-function ownerName(o){return o==='share'?'공유 · 만족':o==='upload'?'업로드 · 커리어':''}
 
 function catArrow(c){
   if(c==='Rehab') return 'Rehab → 허용이 주인';
@@ -173,17 +166,15 @@ function showToday(){
       ? `${name?name+' · ':''}${prof||''}${n?` · 변수 <b>${n}</b>`:' · 변수 확인 필요'}`
       : '오늘 변수 — 확인 필요';
   $('#todayArrow').textContent=catArrow(cat);
-  const owner=ownerName(($('#cl_owner')||{}).value||(close.at===t?close.owner:''));
   $('#todayBind').textContent=
-    `렌즈 1 — ${owner||'확인 필요'} · 존재 1 — ${catArrow(cat)} · 시간 1 — 오늘 · 기록 1 — 확인 필요`;
+    `렌즈 1 — 확인 필요 · 존재 1 — ${catArrow(cat)} · 시간 1 — 오늘 · 기록 1 — 확인 필요`;
 }
 function yestNote(){
   const c=LS.get('ontoClose',{}), o=LS.get('ontoOpen',{}), t=today();
   const line=(c.at&&c.at!==t)?(c.line||''):'';
-  const own=(c.at&&c.at!==t)?ownerName(c.owner):'';
-  $('#yestLine').textContent= line||own
-    ?`어제 글 — ${line||'확인 필요'} · 어제 주인 — ${own||'확인 필요'} · Exit가 아님`
-    :'어제 글 · 어제 주인 — Exit가 아님';
+  $('#yestLine').textContent= line
+    ?`어제 글 — ${line}. Exit가 아님`
+    :'어제 글 — Exit가 아님';
   const pred=(o.at&&o.at!==t)?(o.op_today_pred||o.op_pred||''):'';
   const act=(c.at&&c.at!==t)?(c.act||''):'';
   $('#yestPred').textContent= pred||act
@@ -218,7 +209,6 @@ function fill(){
     if(close.exit)$('#cl_exit').value=close.exit;
     if(close.act)$('#cl_act').value=close.act;
     if(close.line)$('#cl_line').value=close.line;
-    if(close.owner)$('#cl_owner').value=close.owner;
   } else if(open.op_next) $('#cl_var').value=open.op_next;
   showToday(); yestNote(); checks();
 }
@@ -244,16 +234,14 @@ $('#closeSave').onclick=()=>{
     var:($('#cl_var').value||'').trim()||'확인 필요',
     exit:($('#cl_exit').value||'').trim(),
     act:($('#cl_act').value||'').trim(),
-    line:($('#cl_line').value||'').trim(),
-    owner:($('#cl_owner').value||'').trim()
+    line:($('#cl_line').value||'').trim()
   };
-  if(!rec.name||!rec.profile||!rec.problem||!rec.exit||!rec.act||!rec.line||!rec.owner){alert('이름 · 프로필 · Category · Exit · Actual · 글 · 주인을 남긴다.');return;}
+  if(!rec.name||!rec.profile||!rec.problem||!rec.exit||!rec.act||!rec.line){alert('이름 · 프로필 · Category · Exit · Actual · 글을 남긴다.');return;}
   LS.set('ontoClose',rec);
   showToday(); yestNote();
   alert('닫기를 남겼다.');
 };
 $('#cl_problem').onchange=showToday;
-$('#cl_owner').onchange=showToday;
 fill();
 </script>
 </body>
