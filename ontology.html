@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movtrength · 철학 계층 워크숍</title>
+<style>
+:root{
+  --bg:#f5f6f8; --card:#ffffff; --ink:#16181d; --ink2:#5b616e; --ink3:#8b909c;
+  --line:#e3e6ec; --line2:#eef0f4;
+  --blue:#2f6df6; --blue-bg:#eef3ff;
+  --green:#0f8b60; --green-bg:#e9f7f1;
+  --amber:#b06d05; --amber-bg:#fdf3e3;
+  --red:#c33; --red-bg:#fdeeee;
+  --purple:#6b4bd6; --purple-bg:#f1edfd;
+  --radius:14px;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1115; --card:#171a20; --ink:#e9ecf1; --ink2:#a2a9b6; --ink3:#727a89;
+    --line:#262b34; --line2:#1f242c;
+    --blue:#7aa2ff; --blue-bg:#1a2338;
+    --green:#4fd1a1; --green-bg:#12291f;
+    --amber:#e8b360; --amber-bg:#2b2113;
+    --red:#ff8a8a; --red-bg:#2e1a1a;
+    --purple:#b39bff; --purple-bg:#211a35;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  font-size:15px; line-height:1.65; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:16px 14px 96px}
+h1,h2,h3,h4{margin:0;line-height:1.3;letter-spacing:-.02em}
+header.hero{
+  background:linear-gradient(135deg,#1a2744,#2f6df6 58%,#6b4bd6);
+  color:#fff;border-radius:18px;padding:22px 22px 20px;margin-bottom:14px;
+}
+header.hero .kicker{font-size:12px;font-weight:800;letter-spacing:.09em;opacity:.85;text-transform:uppercase}
+header.hero h1{font-size:26px;font-weight:800;margin:6px 0 8px}
+header.hero p{margin:0;font-size:14px;opacity:.92;max-width:68ch}
+.hero-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+.hero-note{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:12px 14px;font-size:13px;max-width:340px}
+.hero-note b{display:block;margin-bottom:4px;font-size:12px;letter-spacing:.04em}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+nav.tabs button{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink2);
+  padding:9px 14px;border-radius:999px;font-size:13.5px;font-weight:700;cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:.12s;
+}
+nav.tabs button:hover{color:var(--ink)}
+nav.tabs button[aria-selected="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.panel{display:none}
+.panel.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card>h3{font-size:15px;font-weight:800;margin-bottom:3px}
+.card>.sub{font-size:12.5px;color:var(--ink3);margin-bottom:12px}
+.note{background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:0 9px 9px 0;padding:10px 12px;font-size:13px;margin:10px 0}
+.note.b{background:var(--blue-bg);border-color:var(--blue)}
+.note.g{background:var(--green-bg);border-color:var(--green)}
+.note.p{background:var(--purple-bg);border-color:var(--purple)}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.02em}
+.tag.b{background:var(--blue-bg);color:var(--blue)}
+.tag.g{background:var(--green-bg);color:var(--green)}
+.tag.a{background:var(--amber-bg);color:var(--amber)}
+.tag.r{background:var(--red-bg);color:var(--red)}
+.tag.p{background:var(--purple-bg);color:var(--purple)}
+.tag.n{background:var(--bg);color:var(--ink3);border:1px solid var(--line2)}
+code{font-family:var(--mono);font-size:.9em;background:var(--bg);padding:1px 5px;border-radius:5px;border:1px solid var(--line2)}
+ul.tight{margin:6px 0;padding-left:19px}ul.tight li{margin:4px 0}
+.grid{display:grid;gap:10px}
+.grid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:780px){.grid.c2,.grid.c3{grid-template-columns:1fr}}
+.node{
+  border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:var(--card);
+}
+.node h4{font-size:14.5px;margin-bottom:4px}
+.node .id{font-family:var(--mono);font-size:11px;color:var(--ink3);font-weight:800;letter-spacing:.04em}
+.node .why{font-size:13px;color:var(--ink2);margin:6px 0 8px}
+.node .not{font-size:12.5px;color:var(--ink3)}
+.node .not b{color:var(--red);font-weight:800}
+.votes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.votes button{
+  border:1px solid var(--line);background:var(--bg);color:var(--ink2);
+  padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.votes button.on.ok{background:var(--green);border-color:var(--green);color:#fff}
+.votes button.on.edit{background:var(--amber);border-color:var(--amber);color:#fff}
+.votes button.on.park{background:var(--ink2);border-color:var(--ink2);color:#fff}
+.node[data-vote="ok"]{border-color:var(--green)}
+.node[data-vote="edit"]{border-color:var(--amber)}
+.node[data-vote="park"]{opacity:.72}
+.stack{
+  display:grid;gap:8px;margin:8px 0 0;
+}
+.stack .row{
+  display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:start;
+  background:var(--bg);border:1px solid var(--line2);border-radius:11px;padding:10px 12px;
+}
+.stack .lv{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--ink3);padding-top:2px}
+.stack .nm{font-weight:800;font-size:14px}
+.stack .ds{font-size:12.5px;color:var(--ink2)}
+select,textarea,input[type=text]{
+  width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+  background:var(--bg);color:var(--ink);font-family:inherit;font-size:14px;
+}
+textarea{min-height:72px;resize:vertical;line-height:1.55}
+label.f{display:block;font-size:11.5px;font-weight:800;color:var(--ink3);letter-spacing:.03em;margin-bottom:4px}
+button.btn{
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  padding:9px 14px;border-radius:9px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;
+}
+button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sentence{
+  font-size:16px;line-height:1.7;font-weight:650;background:var(--blue-bg);
+  border-radius:12px;padding:14px 16px;margin:8px 0;
+}
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.metric{background:var(--bg);border:1px solid var(--line2);border-radius:11px;padding:9px 11px}
+.metric .k{font-size:11px;color:var(--ink3);font-weight:700}
+.metric .v{font-size:20px;font-weight:800;font-family:var(--mono);margin-top:1px}
+.metric.hl{background:var(--blue-bg)}.metric.hl .v{color:var(--blue)}
+.metric.gr{background:var(--green-bg)}.metric.gr .v{color:var(--green)}
+.metric.am{background:var(--amber-bg)}.metric.am .v{color:var(--amber)}
+.footer{text-align:center;font-size:12px;color:var(--ink3);padding:24px 0 8px}
+.q{border-top:1px solid var(--line2);padding-top:10px;margin-top:10px}
+.q b{display:block;margin-bottom:4px}
+.engines{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:840px){.engines{grid-template-columns:1fr}}
+.engine{border:1px solid var(--line);border-radius:12px;padding:13px 14px;min-height:100%}
+.engine.full{background:var(--blue-bg);border-color:transparent}
+.engine.hole{background:var(--bg);border-style:dashed}
+.engine .kicker{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--ink3);margin-bottom:4px}
+.engine h4{font-size:16px;margin-bottom:6px}
+.engine ul{margin:8px 0 0;padding-left:18px;font-size:13px}
+.plug{
+  display:grid;grid-template-columns:140px 1fr 1fr;gap:8px;align-items:start;
+  border:1px solid var(--line2);border-radius:11px;padding:10px 12px;margin:0 0 8px;background:var(--bg);
+  cursor:pointer;
+}
+.plug:hover,.plug.on{border-color:var(--blue);background:var(--blue-bg)}
+.plug .old{font-weight:800;font-size:13.5px}
+.plug .map{font-size:12.5px;color:var(--ink2)}
+.plug .kind{font-size:11px;font-weight:800;color:var(--ink3)}
+@media(max-width:720px){.plug{grid-template-columns:1fr}}
+.sysmap{display:grid;gap:8px}
+.sysmap .band{border-radius:12px;padding:12px 14px;border:1px solid var(--line2)}
+.sysmap .band h4{font-size:13px;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.chip.ghost{opacity:.45;border-style:dashed}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="hero-row">
+    <div style="flex:1 1 380px">
+      <div class="kicker">Movtrength · Ontology Workshop v0</div>
+      <h1>철학 계층을 다시 쌓기</h1>
+      <p>지금 쓰는 판정 체계는 이 파일에서 <b>열지 않습니다.</b> 먼저 당신의 철학을 공리로 고정하고, 그 공리가 아웃풋·만족·커리어를 어떻게 결합하는지부터 같이 정합니다. 아래 노드는 전부 초안입니다. 승인하기 전에는 체계가 아닙니다.</p>
+    </div>
+    <div class="hero-note">
+      <b>이 워크숍의 규칙</b>
+      계층은 나무가 아니라 <u>차원</u>입니다. 위에서 아래로 상속되지 않습니다. 결합은 평균이 아니라 <u>칸</u>입니다. 각 차원에서 하나씩 골라 오늘의 칸을 만듭니다.
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button type="button" aria-selected="true" data-tab="t0">0 전제</button>
+  <button type="button" data-tab="t1">1 공리</button>
+  <button type="button" data-tab="t2">2 렌즈</button>
+  <button type="button" data-tab="t3">3 존재</button>
+  <button type="button" data-tab="t4">4 시간</button>
+  <button type="button" data-tab="t5">5 기록</button>
+  <button type="button" data-tab="t6">6 결합</button>
+  <button type="button" data-tab="t7">7 삽입</button>
+</nav>
+
+<section class="panel on" id="t0">
+  <div class="card">
+    <h3>왜 기존 체계를 잠시 닫는가</h3>
+    <div class="sub">닫는 것은 폐기가 아닙니다. 층위를 다시 정하기 전에 익숙한 라벨이 자리를 선점하지 않게 하려는 것입니다.</div>
+    <p style="margin:0 0 10px;font-size:14px">힘선 탐색기에 이미 있는 Clearance · Capacity · Level · Status · Phase · Category는 <b>판정 언어</b>입니다. 잘 작동하는 판정 언어일 수 있습니다. 다만 지금은 그 언어가 <u>철학의 어디에 앉는지</u>, 그리고 클라이언트 만족과 커리어를 어떤 층에서 다루는지가 비어 있습니다. 비어 있는 층을 기존 라벨로 메우면 체계가 커 보이지만 결합은 생기지 않습니다.</p>
+    <div class="note b">
+      이번 재구성의 목표는 세 가지를 <b>같은 문법으로</b> 다루게 하는 것입니다.
+      <b>클라이언트 아웃풋</b> · <b>클라이언트 만족</b> · <b>나의 커리어</b>.
+      세 개를 평균하지 않습니다. 한 칸의 주인은 하나이고, 나머지는 제약입니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>제안하는 5개 차원</h3>
+    <div class="sub">나무는 아닙니다. 다섯 장을 겹쳐 칸을 만드는 구조입니다.</div>
+    <div class="stack">
+      <div class="row"><div class="lv">L0</div><div><div class="nm">공리</div><div class="ds">층이 아닙니다. 결합을 허용하거나 막는 규칙입니다.</div></div></div>
+      <div class="row"><div class="lv">L1</div><div><div class="nm">목적 렌즈</div><div class="ds">아웃풋 · 만족 · 커리어. 왜 이 칸을 여는가.</div></div></div>
+      <div class="row"><div class="lv">L2</div><div><div class="nm">존재 층</div><div class="ds">의미 · 과제 · 조절 · 역학 · 허용. 지금 무엇을 보고 있는가.</div></div></div>
+      <div class="row"><div class="lv">L3</div><div><div class="nm">시간 층</div><div class="ds">오늘 · 블록 · 관계 · 시즌. 이 판단이 사는 시계.</div></div></div>
+      <div class="row"><div class="lv">L4</div><div><div class="nm">기록 객체</div><div class="ds">관찰 · 가설 · 실험 · 증거 · 다음 문장 · 자산. 실제로 남기는 것.</div></div></div>
+    </div>
+    <div class="note g">결합 문법: <code>오늘의 칸 = 렌즈 1 + 존재 1 + 시간 1 + 기록 1</code>. 공리가 그 칸을 열거나 닫습니다.</div>
+  </div>
+
+  <div class="card">
+    <h3>초안의 출처 — 당신이 이미 쓰고 있는 문장</h3>
+    <div class="sub">새 체계를 밖에서 가져오지 않습니다. 기존 작업에서 반복된 판단만 공리 후보로 올립니다.</div>
+    <ul class="tight">
+      <li>세 축을 평균하지 않는다. 가장 낮은 관련 축이 전체를 결정한다.</li>
+      <li>신분이 문제를 결정하지 않는다. Category는 현재 문제의 종류다.</li>
+      <li>상태는 높이가 아니다. 다시 쌓는 국면과 쌓는 높이는 다르다.</li>
+      <li>보상은 원인이 아니다. 대체 전략을 고치면 가설이 검증되지 않는다.</li>
+      <li>처방은 가설 검증이다. 변수는 하나다.</li>
+      <li>먼저 계산하고 틀린다. 슬라이더부터 움직이면 구경이다.</li>
+      <li>방향은 선언, 크기와 분배는 계산.</li>
+      <li>클라이언트에게 주는 것은 숫자보다 다음 Exit 한 줄이다.</li>
+      <li>신뢰도 등급이 다른 값을 같은 표에서 비교하지 않는다.</li>
+      <li>센터 철학을 회원의 상태로 쓰지 않는다.</li>
+      <li>감량의 목적은 가벼움이 아니라 에너지 레벨 · RFD · agility다.</li>
+      <li>현기증 · 머리 띵 · 소화 붕괴가 오면 진행을 끊는다.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="panel" id="t1">
+  <div class="card">
+    <h3>L0 공리 — 층이 아니라 문</h3>
+    <div class="sub">각 노드를 <b>승인 / 수정 / 보류</b>로 표시하세요. 보류는 삭제 후보입니다. 승인한 공리만 6번 탭의 결합을 통과합니다.</div>
+    <div id="axioms" class="grid"></div>
+  </div>
+</section>
+
+<section class="panel" id="t2">
+  <div class="card">
+    <h3>L1 목적 렌즈 — 왜 이 칸을 여는가</h3>
+    <div class="sub">당신이 명시한 세 축입니다. 직교합니다. 한 렌즈가 다른 렌즈를 덮지 않습니다. 이것이 공리 A1의 확장입니다.</div>
+    <div id="lenses" class="grid c3"></div>
+  </div>
+  <div class="card">
+    <h3>렌즈 결합 규칙 (초안)</h3>
+    <ul class="tight">
+      <li><b>주인은 하나다.</b> 오늘 칸의 주인 렌즈를 먼저 고른다.</li>
+      <li><b>나머지는 제약이다.</b> 만족을 올리려다 허용 게이트를 열면 안 된다. 커리어 자산을 쌓으려다 아웃풋 실험을 흐리면 안 된다.</li>
+      <li><b>세 렌즈가 동시에 잘 보이면 의심한다.</b> 평균의 다른 얼굴이다. 무엇이 주인인지 다시 묻는다.</li>
+    </ul>
+    <div class="note">확인이 필요한 지점: 어떤 주에는 커리어가 주인이 되어도 되는가? 예를 들어 도구를 만들거나 케이스를 패턴화하는 주. 초안은 <u>된다</u>입니다. 단, 허용 게이트는 어떤 렌즈가 주인이어도 닫을 수 있습니다.</div>
+  </div>
+</section>
+
+<section class="panel" id="t3">
+  <div class="card">
+    <h3>L2 존재 층 — 지금 무엇을 보고 있는가</h3>
+    <div class="sub">아래 층은 위 층을 막을 수 있습니다(게이트). 위 층은 아래 층을 덮지 않습니다. 이것이 예전 Clearance 직관의 자리이지, Clearance라는 라벨을 여기서 쓰지 않습니다.</div>
+    <div id="beings" class="grid"></div>
+  </div>
+</section>
+
+<section class="panel" id="t4">
+  <div class="card">
+    <h3>L3 시간 층 — 이 판단이 사는 시계</h3>
+    <div class="sub">같은 관찰도 시계가 바뀌면 다른 객체가 됩니다. 오늘의 실험이 시즌의 자산이 되려면 한 번 더 써야 합니다.</div>
+    <div id="times" class="grid c2"></div>
+  </div>
+</section>
+
+<section class="panel" id="t5">
+  <div class="card">
+    <h3>L4 기록 객체 — 실제로 남기는 것</h3>
+    <div class="sub">말하지 않고 남지 않은 것은 체계가 아닙니다. 세 렌즈가 요구하는 기록이 다릅니다.</div>
+    <div id="objects" class="grid c2"></div>
+  </div>
+</section>
+
+<section class="panel" id="t6">
+  <div class="card">
+    <h3>오늘의 칸 — 차원을 결합한다</h3>
+    <div class="sub">각 차원에서 하나씩 고르면 문장이 됩니다. 승인한 공리만 이 칸의 문으로 작동합니다.</div>
+    <div class="grid c2">
+      <div>
+        <label class="f">주인 렌즈</label>
+        <select id="pickLens"></select>
+      </div>
+      <div>
+        <label class="f">존재 층</label>
+        <select id="pickBeing"></select>
+      </div>
+      <div>
+        <label class="f">시간</label>
+        <select id="pickTime"></select>
+      </div>
+      <div>
+        <label class="f">기록</label>
+        <select id="pickObj"></select>
+      </div>
+    </div>
+    <div style="margin-top:12px">
+      <label class="f">이 칸에서 다루는 사람 / 상황 (한 줄)</label>
+      <input type="text" id="pickWho" placeholder="예: BJJ 선수, 반월 봉합 10주, 시합 8주 전">
+    </div>
+    <div class="sentence" id="cellSentence"></div>
+    <div id="cellGates"></div>
+    <div class="btnrow">
+      <button class="btn pri" id="saveCell">이 칸을 초안에 남기기</button>
+      <button class="btn" id="exportDraft">초안 마크다운 복사</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>남겨 둔 칸</h3>
+    <div class="sub">같이 구성할 재료입니다. 다음 턴에서 공리를 고치거나 층을 합칩니다.</div>
+    <div id="savedCells"></div>
+  </div>
+
+  <div class="card">
+    <h3>진행</h3>
+    <div class="metrics" id="progress"></div>
+    <div class="note p" style="margin-top:12px">
+      다음으로 당신이 말해 주면 층이 고정됩니다.
+      <ol class="tight">
+        <li>공리 중 <b>빼야 하는 것</b>과 <b>빠진 것</b> (당신 문장으로).</li>
+        <li>존재 층 5개가 너무 많은지, 역학과 허용을 한 층으로 볼지.</li>
+        <li>커리어가 주인인 주가 실제로 있는지 — 있으면 최근 한 사례.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="t7">
+  <div class="card">
+    <h3>삽입하면 나오는 그림 — 세 엔진, 하나만 채워짐</h3>
+    <div class="sub">Clearance·Level을 새 계층의 한 층으로 올리면 프랑켄슈타인이 됩니다. 올바른 자리는 <b>아웃풋 렌즈의 판정 엔진</b>입니다. 체계 전체가 커지는 것이 아니라, 빈 엔진 두 개가 보입니다.</div>
+    <div class="sysmap">
+      <div class="band" style="background:var(--purple-bg);border-color:transparent">
+        <h4>L0 공리 — 세 엔진 공통의 문</h4>
+        <div class="chips">
+          <span class="chip">A1 평균 금지</span>
+          <span class="chip">A3 상태 ≠ 높이</span>
+          <span class="chip">A5 변수 하나</span>
+          <span class="chip">A8 Exit 한 줄</span>
+          <span class="chip">A12 게이트 우선</span>
+        </div>
+      </div>
+      <div class="engines">
+        <div class="engine full">
+          <div class="kicker">P1 · 채워짐</div>
+          <h4>아웃풋 엔진</h4>
+          <div class="sub" style="margin:0">여기로 Clearance·Level이 들어옵니다. 새 층이 아니라 이 렌즈의 절차입니다.</div>
+          <ul>
+            <li>게이트: Clearance</li>
+            <li>허용 상태: Status</li>
+            <li>과제 높이: Level</li>
+            <li>학습 위치: Phase</li>
+            <li>용량 축: Mobility · Control · Load</li>
+          </ul>
+        </div>
+        <div class="engine hole">
+          <div class="kicker">P2 · 구멍</div>
+          <h4>만족 엔진</h4>
+          <div class="sub" style="margin:0">연결점만 있습니다. 판정 절차는 아직 없습니다.</div>
+          <ul>
+            <li>연결: 다음 문장 (Exit 한 줄)</li>
+            <li>시계: 이 관계</li>
+            <li>없는 것: 이해됨·안전·진행감각을 가르는 축</li>
+          </ul>
+        </div>
+        <div class="engine hole">
+          <div class="kicker">P3 · 구멍</div>
+          <h4>커리어 엔진</h4>
+          <div class="sub" style="margin:0">연결점만 있습니다. 케이스가 자산이 되는 절차가 없습니다.</div>
+          <ul>
+            <li>연결: 자산 한 줄</li>
+            <li>시계: 이 시즌</li>
+            <li>없는 것: 패턴화 · 도구화 · 위임 가능 판정</li>
+          </ul>
+        </div>
+      </div>
+      <div class="band">
+        <h4>L2 존재 — 아웃풋 엔진이 꽂히는 자리</h4>
+        <div class="chips">
+          <span class="chip">E1 의미 ← Profile / Category의 주인</span>
+          <span class="chip">E2 과제 ← Level의 정의역</span>
+          <span class="chip">E3 조절 ← Control, Phase</span>
+          <span class="chip">E4 역학 ← 처방의 근거</span>
+          <span class="chip">E5 허용 ← Clearance, Status, Load</span>
+        </div>
+      </div>
+    </div>
+    <div class="note b">
+      한 줄. Clearance·Level은 철학 체계가 아닙니다. <b>아웃풋 렌즈가 E2·E3·E5를 읽을 때 쓰는 절차</b>입니다.
+      넣으면 체계가 완성되는 것이 아니라, 만족과 커리어가 같은 문법의 빈 엔진임이 드러납니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>옛 라벨이 앉는 자리</h3>
+    <div class="sub">클릭하면 왜 그 칸인지 한 줄이 열립니다. 층으로 승격되지 않는 것들이 중요합니다.</div>
+    <div id="plugs"></div>
+    <div class="sentence" id="plugWhy" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <h3>이 그림이 금지하는 착각</h3>
+    <ul class="tight">
+      <li><b>Clearance를 L2의 여섯 번째 층으로 올리지 않는다.</b> 허용(E5)의 게이트 판정이다.</li>
+      <li><b>Level을 L3의 다섯 번째 시계로 올리지 않는다.</b> 과제(E2)의 읽음값이다. Status·Phase와 독립인 이유가 여기 있다.</li>
+      <li><b>Category를 신분 층으로 올리지 않는다.</b> 지금 문제의 주인이 어느 존재 층인가를 가리키는 화살표다. Rehab이면 E5가 주인, Sport이면 E2가 주인.</li>
+      <li><b>세 엔진을 평균해 "좋은 코칭 점수"를 만들지 않는다.</b> 아웃풋 엔진이 잘 돌아도 만족·커리어 구멍을 덮지 못한다.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="footer">Movtrength · 철학 계층 워크숍 v0 · 기존 판정 체계는 아웃풋 엔진으로만 삽입한다.</div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const LS = {
+  get(k, d){ try{ const v = JSON.parse(localStorage.getItem(k)); return v ?? d; }catch{ return d; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
+
+const AXIOMS = [
+  {id:'A1', t:'평균하지 않는다',
+    y:'잘 되는 축이 못 되는 축을 덮지 않는다. 관련 축 중 결정축이 전체를 말한다.',
+    n:'세 점수를 더해 종합 점수를 만들지 않는다. 아웃풋이 좋아 만족을 덮지 않고, 만족이 좋아 커리어 공백을 덮지 않는다.'},
+  {id:'A2', t:'신분이 문제를 결정하지 않는다',
+    y:'선수도 회복이 문제면 회복이 문제다. 일반인도 과제가 문제면 과제가 문제다.',
+    n:'Athlete / 일반 / 재활 라벨을 사람의 신분으로 쓰지 않는다. 그 라벨은 현재 문제의 종류일 때만 유효하다.'},
+  {id:'A3', t:'상태는 높이가 아니다',
+    y:'지금 허용되는 것과, 해내는 과제의 난이도는 다른 축이다.',
+    n:'"다시 쌓는 중"을 낮은 과제로 자동 번역하지 않는다. 반대로 높은 과제가 허용을 증명하지도 않는다.'},
+  {id:'A4', t:'보상은 원인이 아니다',
+    y:'보상은 현재 기능을 유지하는 대체 전략이다. 기록은 하되 원인 칸에 넣지 않는다.',
+    n:'반대쪽을 먼저 고치면 가설이 영영 검증되지 않는다.'},
+  {id:'A5', t:'처방은 가설 검증이다',
+    y:'한 칸에서 바꾸는 변수는 하나다. 결과가 그 변수를 가리켜야 한다.',
+    n:'부하·템포·환경·감각을 한 세션에 같이 바꾸지 않는다. 그건 치료가 아니라 소음이다.'},
+  {id:'A6', t:'예측 후 검증한다',
+    y:'먼저 적고 그다음 본다. 틀린 예측이 학습이다.',
+    n:'슬라이더·프로그램·식단을 먼저 움직이고 설명을 나중에 붙이지 않는다. 그건 구경이다.'},
+  {id:'A7', t:'방향은 선언, 크기는 계산',
+    y:'무엇을 돌리는가 / 무엇을 목표로 하는가는 사실로 선언한다. 얼마나·어떻게 나뉘는가는 계산한다.',
+    n:'느낌으로 방향을 바꾸거나, 계산으로 목표를 만들지 않는다.'},
+  {id:'A8', t:'숫자는 설명이 아니다',
+    y:'클라이언트에게 전달하는 것은 다음 Exit 한 줄이다.',
+    n:'레벨 숫자, 체중, 각도, 1RM을 설명의 본체처럼 말하지 않는다. 그건 내부 기록이다.'},
+  {id:'A9', t:'신뢰도 등급을 섞어 읽지 않는다',
+    y:'근거가 다른 값은 같은 표에서 비교하지 않는다. 높은 신뢰도와 낮은 신뢰도를 평균하지 않는다.',
+    n:'모델이 약한 축의 숫자를 강한 축의 숫자 옆에 놓고 결정을 내리지 않는다.'},
+  {id:'A10', t:'철학을 상태로 쓰지 않는다',
+    y:'센터의 신념, 코치의 슬로건은 회원의 오늘 상태가 아니다.',
+    n:'"우리 센터는 Rebuild를 한다"는 회원의 허용 상태가 아니다.'},
+  {id:'A11', t:'목적이 체중·통증이 아니다',
+    y:'체중, 통증, ROM은 수단일 수 있다. 목적은 에너지·출력·과제의 질이다.',
+    n:'가벼워짐, 통증 0, 가동범위 숫자를 목적 칸에 두지 않는다. 그것이 과제의 질을 가리킬 때만 증거다.'},
+  {id:'A12', t:'게이트가 목표보다 앞선다',
+    y:'위험 신호 — 회복 붕괴, 탈수, 머리 띵, 진행성 신경 결손 — 가 오면 진행을 끊는다.',
+    n:'시합, 일정, 커리어 자산, 오늘의 만족이 게이트를 열지 못한다.'},
+];
+
+const LENSES = [
+  {id:'P1', t:'아웃풋',
+    y:'클라이언트가 세션 밖에서 해내게 된 것. 과제 수행, 허용 범위의 실제 변화, 전이, 지속.',
+    n:'오늘의 기분, 코치 설명의 유창함, 프로그램이 있어 보이는 것.'},
+  {id:'P2', t:'만족',
+    y:'이 관계를 계속할 이유. 이해됨, 안전, 진행 감각, 자율, 지난 말이 다음 세션에서 맞음.',
+    n:'칭찬, 엔터테인먼트, 즉시 통증 0, 바쁜 스케줄이 주는 안심.'},
+  {id:'P3', t:'커리어',
+    y:'이 케이스가 나의 시스템에 남기는 것. 패턴, 설명 문장, 도구화, 포지션 선명도, 위임 가능성.',
+    n:'매출만, 팔로워, 바빠 보이기, 케이스를 쌓지 못하는 반복 노동.'},
+];
+
+const BEINGS = [
+  {id:'E1', t:'의미 / 계약',
+    y:'이 사람이 왜 여기 있는가. 목표의 주인. 시합, 일상 복귀, 통증 없는 계단, 체급.',
+    n:'코치가 멋있어 보이는 목표, 센터의 기본 패키지.'},
+  {id:'E2', t:'과제',
+    y:'해내야 하는 구체적인 일. 감속, 가드 리텐션, 체중 스쿼트, 계체 다음날 스크램블.',
+    n:'막연한 "기능 향상". 과제가 없으면 아웃풋을 측정할 수 없다.'},
+  {id:'E3', t:'조절',
+    y:'그 과제를 어떻게 수행하는가. 타이밍, 전략, 보상, 반복 안정.',
+    n:'ROM 숫자만으로 조절을 대체하지 않는다. 보상 없이 가능한 범위가 여기 산다.'},
+  {id:'E4', t:'역학',
+    y:'힘이 어떻게 나뉘는가. 힘선, 지레, 회전/압박, 부착 배열이 만드는 성격.',
+    n:'근육 이름, 자극 부위 감각, "코어를 조여라" 같은 슬로건.'},
+  {id:'E5', t:'허용',
+    y:'조직·신경·회복이 오늘 무엇을 허락하는가. 게이트가 사는 층.',
+    n:'통증 점수만으로 허용을 읽지 않는다. 의료 제한과 24시간 반응이 여기 산다.'},
+];
+
+const TIMES = [
+  {id:'T1', t:'오늘', y:'바꿀 변수 하나. 세션의 시계.', n:'오늘 안에 시즌을 증명하려 하지 않는다.'},
+  {id:'T2', t:'이 블록', y:'가설이 사는 곳. 보통 2–6주. 예측과 증거가 한 쌍이 되는 시계.', n:'블록을 매주 갈아엎으면 가설이 죽는다.'},
+  {id:'T3', t:'이 관계', y:'만족과 신뢰가 쌓이는 곳. 말이 다음 세션에서 맞았는가가 여기 산다.', n:'한 세션의 기분으로 관계를 판정하지 않는다.'},
+  {id:'T4', t:'이 시즌', y:'커리어 위치가 바뀌는 곳. 어떤 문제 종류를 내 것으로 만들었는가.', n:'바쁜 달을 시즌의 성장으로 착각하지 않는다.'},
+];
+
+const OBJECTS = [
+  {id:'O1', t:'관찰', y:'사실. 아직 해석이 아닌 것.', n:'"약하다", "불안정하다"는 관찰이 아니라 가설이다.'},
+  {id:'O2', t:'가설', y:'아직 사실이 아닌 것. 검증 가능한 한 문장.', n:'여러 원인을 한 문장에 넣지 않는다.'},
+  {id:'O3', t:'실험', y:'오늘 바꾼 변수 하나. 처방이 여기 앉는다.', n:'프로그램 전체가 실험이 되면 결과가 가리키는 것이 없다.'},
+  {id:'O4', t:'증거', y:'예측 대 실제. 가설을 유지·수정·폐기하는 자리.', n:'좋아 보였다는 인상은 증거가 아니다.'},
+  {id:'O5', t:'다음 문장', y:'클라이언트에게 하는 말. Exit 한 줄. 만족 렌즈의 본체.', n:'내부 판정표를 그대로 읽지 않는다.'},
+  {id:'O6', t:'자산', y:'커리어에 남는 한 줄. 패턴, 도구, 가르칠 수 있는 문장.', n:'세션 노트를 쌓아 두는 것만으로 자산이 되지 않는다. 한 번 더 써야 한다.'},
+];
+
+const PLUGS = [
+  {old:'Clearance', kind:'게이트', map:'L2 E5 허용 × A12',
+    why:'Pass / Conditional / Fail은 존재 층이 아니다. 허용 층이 위 칸을 열지 못하게 막는 문이다. Neural Safety · Recovery Signal · Medical Hold는 E5의 세 센서다.'},
+  {old:'Tissue–Neural Status', kind:'상태', map:'L2 E5 허용 × L3 블록',
+    why:'Protect · Settle · Rebuild · Open은 허용의 이름이다. 과제 높이가 아니다. A3가 이 자리와 Level을 갈라 놓는다.'},
+  {old:'Functional Level', kind:'읽음값', map:'P1 아웃풋이 E2 과제를 읽음',
+    why:'층이 아니다. 목표 과제에 필요한 용량 축의 최솟값이다. 정의역은 과제(E2)이고, 값은 아웃풋 엔진의 출력이다.'},
+  {old:'Capacity · Mobility', kind:'용량 축', map:'E4 역학과 E3 조절의 경계',
+    why:'PROM/AROM 요약은 역학 쪽, Controlled ROM은 조절 쪽. 옛 체계가 이미 갈라 놓은 것을 존재 층이 그대로 받는다.'},
+  {old:'Capacity · Control', kind:'용량 축', map:'L2 E3 조절',
+    why:'보상 없이 과제를 유지하는 능력. Phase가 이 층 위에서 움직인다.'},
+  {old:'Capacity · Load Tolerance', kind:'용량 축', map:'L2 E5 허용 · 수행 중',
+    why:'수행 중에 버티는가. 수행 후 24h 반응은 같은 E5라도 Recovery Signal(Clearance)로 간다. 시계가 다르다.'},
+  {old:'Phase', kind:'학습 위치', map:'E2×E3 × L3 블록',
+    why:'Map · Acquire · Stabilize · Transfer는 난이도 안에서 학습이 진행된 위치다. Level의 시계가 아니다. 그래서 L3=Level이 되면 안 된다.'},
+  {old:'Category', kind:'화살표', map:'지금 문제의 주인 층',
+    why:'신분이 아니다. Rehab이면 E5가 주인, Sport이면 E2가 주인, Fitness는 E1/E2. 존재 층을 가리키는 화살표로 앉는다.'},
+  {old:'Profile', kind:'계약', map:'L2 E1 의미 / 계약',
+    why:'이 사람이 되려는 목표 프로필. Athlete (BJJ)는 여기 산다. Category와 같은 칸에 두지 않는다.'},
+  {old:'Primary / Secondary / Compensation', kind:'가설 구조', map:'L4 O2 가설',
+    why:'존재 층이 아니다. 관찰을 가설로 쓸 때의 자리 규칙이다. 보상은 원인 칸에 못 들어온다(A4).'},
+  {old:'처방 변수 하나', kind:'실험', map:'L4 O3 실험 × A5',
+    why:'아웃풋 엔진의 손. 오늘 칸에서 바꾸는 것. 프로그램 전체가 실험이 되면 결과가 가리키는 것이 없다.'},
+  {old:'다음 Exit 한 줄', kind:'연결점', map:'L4 O5 다음 문장 → P2 만족',
+    why:'아웃풋 엔진이 만족 엔진에 넘기는 유일한 공식 연결이다. 숫자(Level)는 내부 기록이고, 이 한 줄이 관계 시계로 간다.'},
+];
+
+const votes = LS.get('ontoVotes', {});
+const cells = LS.get('ontoCells', []);
+
+function voteOf(id){ return votes[id] || ''; }
+
+function renderNode(item, extra){
+  const v = voteOf(item.id);
+  return `<article class="node" data-id="${item.id}" data-vote="${v}">
+    <div class="id">${item.id}${extra||''}</div>
+    <h4>${item.t}</h4>
+    <div class="why">${item.y}</div>
+    <div class="not"><b>아닌 것.</b> ${item.n}</div>
+    <div class="votes">
+      <button type="button" data-v="ok" class="${v==='ok'?'on ok':''}">승인</button>
+      <button type="button" data-v="edit" class="${v==='edit'?'on edit':''}">수정</button>
+      <button type="button" data-v="park" class="${v==='park'?'on park':''}">보류</button>
+    </div>
+  </article>`;
+}
+
+function bindVotes(root){
+  root.querySelectorAll('.votes button').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.closest('.node').dataset.id;
+      const v = btn.dataset.v;
+      votes[id] = votes[id]===v ? '' : v;
+      LS.set('ontoVotes', votes);
+      paint();
+    };
+  });
+}
+
+function fillSelect(sel, items, pred){
+  sel.innerHTML = items.filter(pred||(()=>true)).map(i=>`<option value="${i.id}">${i.id} · ${i.t}</option>`).join('');
+}
+
+function find(list, id){ return list.find(x=>x.id===id); }
+
+function approvedAxioms(){
+  return AXIOMS.filter(a=>voteOf(a.id)==='ok');
+}
+
+function compose(){
+  const lens = find(LENSES, $('#pickLens').value);
+  const being = find(BEINGS, $('#pickBeing').value);
+  const time = find(TIMES, $('#pickTime').value);
+  const obj = find(OBJECTS, $('#pickObj').value);
+  const who = ($('#pickWho').value||'이 사람').trim();
+  const gates = approvedAxioms().filter(a=>['A1','A5','A8','A12'].includes(a.id));
+  $('#cellSentence').innerHTML =
+    `이번 <b>${time.t}</b>에는 <b>${lens.t}</b>를 주인으로, <b>${being.t}</b>을(를) 보고, <b>${obj.t}</b>을(를) 남긴다. 대상: ${who}.`;
+  const closed = voteOf('A12')==='ok' && being.id!=='E5' && lens.id==='P3';
+  const warn = [];
+  if(voteOf('A1')==='ok') warn.push('A1 — 나머지 렌즈는 점수가 아니라 제약이다. 이 칸이 잘 된다고 다른 렌즈를 덮지 않는다.');
+  if(voteOf('A5')==='ok' && obj.id==='O3') warn.push('A5 — 이 실험에서 바꾸는 변수는 하나여야 한다.');
+  if(voteOf('A8')==='ok' && obj.id==='O5') warn.push('A8 — 다음 문장은 숫자가 아니라 Exit 한 줄이다.');
+  if(voteOf('A12')==='ok') warn.push('A12 — 허용 게이트가 닫혀 있으면 이 칸은 열리지 않는다. 존재 층이 허용이 아니어도 게이트는 우선한다.');
+  if(closed) warn.push('주의 — 커리어가 주인이어도 허용 게이트는 닫을 수 있다. 자산 기록이 실험을 대신하지 않는다.');
+  $('#cellGates').innerHTML = gates.length||warn.length
+    ? `<div class="note b">${(warn.length?warn:['승인한 공리가 이 칸을 통과합니다.']).map(w=>`<div>${w}</div>`).join('')}</div>`
+    : `<div class="note">아직 승인한 공리가 없습니다. 1번 탭에서 문을 고르세요.</div>`;
+}
+
+function renderSaved(){
+  if(!cells.length){
+    $('#savedCells').innerHTML = '<div class="sub" style="margin:0">아직 남긴 칸이 없습니다. 위에서 한 칸을 결합해 보세요.</div>';
+    return;
+  }
+  $('#savedCells').innerHTML = cells.map((c,i)=>`
+    <div class="node" style="margin-bottom:8px">
+      <div class="id">CELL ${String(cells.length-i).padStart(2,'0')}</div>
+      <h4>${c.text}</h4>
+      <div class="why">${c.who}</div>
+      <div class="votes"><button type="button" data-i="${i}" class="del">삭제</button></div>
+    </div>`).join('');
+  $('#savedCells').querySelectorAll('.del').forEach(b=>b.onclick=()=>{
+    cells.splice(+b.dataset.i,1); LS.set('ontoCells', cells); renderSaved();
+  });
+}
+
+function counts(){
+  const ids = [...AXIOMS,...LENSES,...BEINGS,...TIMES,...OBJECTS].map(x=>x.id);
+  const ok = ids.filter(id=>voteOf(id)==='ok').length;
+  const edit = ids.filter(id=>voteOf(id)==='edit').length;
+  const park = ids.filter(id=>voteOf(id)==='park').length;
+  const open = ids.length - ok - edit - park;
+  $('#progress').innerHTML = `
+    <div class="metric hl"><div class="k">노드</div><div class="v">${ids.length}</div></div>
+    <div class="metric gr"><div class="k">승인</div><div class="v">${ok}</div></div>
+    <div class="metric am"><div class="k">수정</div><div class="v">${edit}</div></div>
+    <div class="metric"><div class="k">보류</div><div class="v">${park}</div></div>
+    <div class="metric"><div class="k">미정</div><div class="v">${open}</div></div>
+    <div class="metric"><div class="k">남긴 칸</div><div class="v">${cells.length}</div></div>`;
+}
+
+function paint(){
+  $('#axioms').innerHTML = AXIOMS.map(a=>renderNode(a,' · 공리')).join('');
+  $('#lenses').innerHTML = LENSES.map(a=>renderNode(a,' · 렌즈')).join('');
+  $('#beings').innerHTML = BEINGS.map(a=>renderNode(a,' · 존재')).join('');
+  $('#times').innerHTML = TIMES.map(a=>renderNode(a,' · 시간')).join('');
+  $('#objects').innerHTML = OBJECTS.map(a=>renderNode(a,' · 기록')).join('');
+  ['axioms','lenses','beings','times','objects'].forEach(id=>bindVotes($('#'+id)));
+  const keep = id => voteOf(id)!=='park';
+  fillSelect($('#pickLens'), LENSES, keep);
+  fillSelect($('#pickBeing'), BEINGS, keep);
+  fillSelect($('#pickTime'), TIMES, keep);
+  fillSelect($('#pickObj'), OBJECTS, keep);
+  compose();
+  renderSaved();
+  counts();
+  renderPlugs();
+}
+
+function renderPlugs(){
+  const box = $('#plugs');
+  if(!box) return;
+  box.innerHTML = PLUGS.map((p,i)=>`
+    <div class="plug" data-i="${i}">
+      <div class="old">${p.old}</div>
+      <div class="kind">${p.kind}</div>
+      <div class="map">${p.map}</div>
+    </div>`).join('');
+  box.querySelectorAll('.plug').forEach(el=>{
+    el.onclick = ()=>{
+      box.querySelectorAll('.plug').forEach(x=>x.classList.remove('on'));
+      el.classList.add('on');
+      const p = PLUGS[+el.dataset.i];
+      const why = $('#plugWhy');
+      why.style.display = 'block';
+      why.innerHTML = `<b>${p.old}</b> → ${p.map}<br>${p.why}`;
+    };
+  });
+}
+
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-selected', b===btn));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on', p.id===btn.dataset.tab));
+  };
+});
+
+['pickLens','pickBeing','pickTime','pickObj','pickWho'].forEach(id=>{
+  $('#'+id).addEventListener('input', compose);
+  $('#'+id).addEventListener('change', compose);
+});
+
+$('#saveCell').onclick = ()=>{
+  cells.unshift({
+    text: $('#cellSentence').innerText,
+    who: $('#pickWho').value || '—',
+    lens: $('#pickLens').value,
+    being: $('#pickBeing').value,
+    time: $('#pickTime').value,
+    obj: $('#pickObj').value,
+    at: new Date().toISOString().slice(0,10)
+  });
+  LS.set('ontoCells', cells);
+  renderSaved(); counts();
+};
+
+$('#exportDraft').onclick = ()=>{
+  const line = (list, title)=>`## ${title}\n\n`+list.map(a=>{
+    const v = voteOf(a.id)||'미정';
+    return `- **${a.id} ${a.t}** — ${v}\n  - ${a.y}`;
+  }).join('\n');
+  const md = `# Movtrength 철학 계층 초안\n\n`+
+    line(AXIOMS,'L0 공리')+'\n\n'+line(LENSES,'L1 렌즈')+'\n\n'+
+    line(BEINGS,'L2 존재')+'\n\n'+line(TIMES,'L3 시간')+'\n\n'+
+    line(OBJECTS,'L4 기록')+'\n\n## 남긴 칸\n\n'+
+    (cells.length?cells.map(c=>`- ${c.at} · ${c.text}`).join('\n'):'- (없음)');
+  navigator.clipboard?.writeText(md).then(()=>alert('초안 마크다운을 복사했습니다.')).catch(()=>{
+    const ta=document.createElement('textarea'); ta.value=md; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove(); alert('초안 마크다운을 복사했습니다.');
+  });
+};
+
+paint();
+</script>
+</body>
+</html>
