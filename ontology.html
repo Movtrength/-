@@ -85,6 +85,7 @@ ul.tight{margin:6px 0;padding-left:19px}ul.tight li{margin:4px 0}
 .node .why{font-size:13px;color:var(--ink2);margin:6px 0 8px}
 .node .not{font-size:12.5px;color:var(--ink3)}
 .node .not b{color:var(--red);font-weight:800}
+.node .src{font-size:11.5px;color:var(--ink3);margin-top:8px;font-family:var(--mono)}
 .votes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .votes button{
   border:1px solid var(--line);background:var(--bg);color:var(--ink2);
@@ -156,6 +157,10 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
 .chip.ghost{opacity:.45;border-style:dashed}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
+.chk:last-child{border-bottom:none}
+.chk input{margin-top:3px;accent-color:var(--blue);width:16px;height:16px;flex:0 0 auto}
+.chk.done label{color:var(--ink3);text-decoration:line-through}
 </style>
 </head>
 <body>
@@ -184,6 +189,11 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
   <button type="button" data-tab="t5">5 기록</button>
   <button type="button" data-tab="t6">6 결합</button>
   <button type="button" data-tab="t7">7 삽입</button>
+  <button type="button" data-tab="t8">8 만족</button>
+  <button type="button" data-tab="t9">9 영상</button>
+  <button type="button" data-tab="t10">10 오늘</button>
+  <button type="button" data-tab="t11">11 닫기</button>
+  <button type="button" data-tab="t12">12 열기</button>
 </nav>
 
 <section class="panel on" id="t0">
@@ -204,7 +214,7 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
     <div class="stack">
       <div class="row"><div class="lv">L0</div><div><div class="nm">공리</div><div class="ds">층이 아닙니다. 결합을 허용하거나 막는 규칙입니다.</div></div></div>
       <div class="row"><div class="lv">L1</div><div><div class="nm">목적 렌즈</div><div class="ds">아웃풋 · 만족 · 커리어. 왜 이 칸을 여는가.</div></div></div>
-      <div class="row"><div class="lv">L2</div><div><div class="nm">존재 층</div><div class="ds">의미 · 과제 · 조절 · 역학 · 허용. 지금 무엇을 보고 있는가.</div></div></div>
+      <div class="row"><div class="lv">L2</div><div><div class="nm">존재 층</div><div class="ds">목표 프로필 · 목표 과제 · Control · 힘선 · 허용. 지금 무엇을 보고 있는가.</div></div></div>
       <div class="row"><div class="lv">L3</div><div><div class="nm">시간 층</div><div class="ds">오늘 · 블록 · 관계 · 시즌. 이 판단이 사는 시계.</div></div></div>
       <div class="row"><div class="lv">L4</div><div><div class="nm">기록 객체</div><div class="ds">관찰 · 가설 · 실험 · 증거 · 다음 문장 · 자산. 실제로 남기는 것.</div></div></div>
     </div>
@@ -212,29 +222,15 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
   </div>
 
   <div class="card">
-    <h3>초안의 출처 — 당신이 이미 쓰고 있는 문장</h3>
-    <div class="sub">새 체계를 밖에서 가져오지 않습니다. 기존 작업에서 반복된 판단만 공리 후보로 올립니다.</div>
-    <ul class="tight">
-      <li>세 축을 평균하지 않는다. 가장 낮은 관련 축이 전체를 결정한다.</li>
-      <li>신분이 문제를 결정하지 않는다. Category는 현재 문제의 종류다.</li>
-      <li>상태는 높이가 아니다. 다시 쌓는 국면과 쌓는 높이는 다르다.</li>
-      <li>보상은 원인이 아니다. 대체 전략을 고치면 가설이 검증되지 않는다.</li>
-      <li>처방은 가설 검증이다. 변수는 하나다.</li>
-      <li>먼저 계산하고 틀린다. 슬라이더부터 움직이면 구경이다.</li>
-      <li>방향은 선언, 크기와 분배는 계산.</li>
-      <li>클라이언트에게 주는 것은 숫자보다 다음 Exit 한 줄이다.</li>
-      <li>신뢰도 등급이 다른 값을 같은 표에서 비교하지 않는다.</li>
-      <li>센터 철학을 회원의 상태로 쓰지 않는다.</li>
-      <li>감량의 목적은 가벼움이 아니라 에너지 레벨 · RFD · agility다.</li>
-      <li>현기증 · 머리 띵 · 소화 붕괴가 오면 진행을 끊는다.</li>
-    </ul>
+    <h3>1번·3번 탭 본문의 출처</h3>
+    <div class="sub">의역을 걷어냈습니다. 공리와 존재 층의 본문은 판정 드릴, 힘선 탐색기, 선수 감량 세션에 있는 문장입니다. 출처가 없는 문장은 올리지 않았습니다.</div>
   </div>
 </section>
 
 <section class="panel" id="t1">
   <div class="card">
     <h3>L0 공리 — 층이 아니라 문</h3>
-    <div class="sub">각 노드를 <b>승인 / 수정 / 보류</b>로 표시하세요. 보류는 삭제 후보입니다. 승인한 공리만 6번 탭의 결합을 통과합니다.</div>
+    <div class="sub">본문은 당신 문장입니다. <b>승인 / 수정 / 보류</b>만 찍으면 됩니다. 보류는 삭제 후보. 승인한 공리만 6번 탭의 결합을 통과합니다.</div>
     <div id="axioms" class="grid"></div>
   </div>
 </section>
@@ -259,7 +255,7 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
 <section class="panel" id="t3">
   <div class="card">
     <h3>L2 존재 층 — 지금 무엇을 보고 있는가</h3>
-    <div class="sub">아래 층은 위 층을 막을 수 있습니다(게이트). 위 층은 아래 층을 덮지 않습니다. 이것이 예전 Clearance 직관의 자리이지, Clearance라는 라벨을 여기서 쓰지 않습니다.</div>
+    <div class="sub">이름도 당신 용어로 바꿨습니다. 아래 층은 위를 막을 수 있고, 위는 아래를 덮지 않습니다.</div>
     <div id="beings" class="grid"></div>
   </div>
 </section>
@@ -303,7 +299,7 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
       </div>
     </div>
     <div style="margin-top:12px">
-      <label class="f">이 칸에서 다루는 사람 / 상황 (한 줄)</label>
+      <label class="f">프로필 · 현재 문제</label>
       <input type="text" id="pickWho" placeholder="예: BJJ 선수, 반월 봉합 10주, 시합 8주 전">
     </div>
     <div class="sentence" id="cellSentence"></div>
@@ -324,12 +320,7 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
     <h3>진행</h3>
     <div class="metrics" id="progress"></div>
     <div class="note p" style="margin-top:12px">
-      다음으로 당신이 말해 주면 층이 고정됩니다.
-      <ol class="tight">
-        <li>공리 중 <b>빼야 하는 것</b>과 <b>빠진 것</b> (당신 문장으로).</li>
-        <li>존재 층 5개가 너무 많은지, 역학과 허용을 한 층으로 볼지.</li>
-        <li>커리어가 주인인 주가 실제로 있는지 — 있으면 최근 한 사례.</li>
-      </ol>
+      이 순환으로 진행한다. 열기 → 오늘 → 닫기 → 열기. Next test가 오늘 변수다.
     </div>
   </div>
 </section>
@@ -363,40 +354,40 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
           </ul>
         </div>
         <div class="engine hole">
-          <div class="kicker">P2 · 구멍</div>
+          <div class="kicker">P2 · 첫 축</div>
           <h4>만족 엔진</h4>
-          <div class="sub" style="margin:0">연결점만 있습니다. 판정 절차는 아직 없습니다.</div>
+          <div class="sub" style="margin:0">S1 다음 Exit 한 줄. S2 공유는 영상 칸.</div>
           <ul>
-            <li>연결: 다음 문장 (Exit 한 줄)</li>
-            <li>시계: 이 관계</li>
-            <li>없는 것: 이해됨·안전·진행감각을 가르는 축</li>
+            <li>S1: 다음 Exit 한 줄</li>
+            <li>S2: 공유 (영상 칸)</li>
+            <li>시계: 이 관계 · 오늘 10분</li>
           </ul>
         </div>
         <div class="engine hole">
-          <div class="kicker">P3 · 구멍</div>
+          <div class="kicker">P3 · 첫 축</div>
           <h4>커리어 엔진</h4>
-          <div class="sub" style="margin:0">연결점만 있습니다. 케이스가 자산이 되는 절차가 없습니다.</div>
+          <div class="sub" style="margin:0">첫 축은 업로드입니다. 공유와 한 점수로 묶지 않습니다.</div>
           <ul>
-            <li>연결: 자산 한 줄</li>
-            <li>시계: 이 시즌</li>
-            <li>없는 것: 패턴화 · 도구화 · 위임 가능 판정</li>
+            <li>C1: 업로드 (영상 칸)</li>
+            <li>심볼 언어: Rebuild (상태 이름과 같이 씀)</li>
+            <li>문: 10분 내외</li>
           </ul>
         </div>
       </div>
       <div class="band">
         <h4>L2 존재 — 아웃풋 엔진이 꽂히는 자리</h4>
         <div class="chips">
-          <span class="chip">E1 의미 ← Profile / Category의 주인</span>
-          <span class="chip">E2 과제 ← Level의 정의역</span>
-          <span class="chip">E3 조절 ← Control, Phase</span>
-          <span class="chip">E4 역학 ← 처방의 근거</span>
+          <span class="chip">E1 목표 프로필 ← Profile</span>
+          <span class="chip">E2 목표 과제 ← Level의 정의역</span>
+          <span class="chip">E3 Control ← Controlled ROM, Phase</span>
+          <span class="chip">E4 힘선 ← 부착 배열, 지레</span>
           <span class="chip">E5 허용 ← Clearance, Status, Load</span>
         </div>
       </div>
     </div>
     <div class="note b">
       한 줄. Clearance·Level은 철학 체계가 아닙니다. <b>아웃풋 렌즈가 E2·E3·E5를 읽을 때 쓰는 절차</b>입니다.
-      넣으면 체계가 완성되는 것이 아니라, 만족과 커리어가 같은 문법의 빈 엔진임이 드러납니다.
+      만족은 S1·S2, 커리어는 C1 업로드. 둘 다 영상 칸의 10분 문을 통과한다.
     </div>
   </div>
 
@@ -418,7 +409,200 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
   </div>
 </section>
 
-<div class="footer">Movtrength · 철학 계층 워크숍 v0 · 기존 판정 체계는 아웃풋 엔진으로만 삽입한다.</div>
+<section class="panel" id="t8">
+  <div class="card">
+    <h3>만족 엔진</h3>
+    <div class="sub">S1은 다음 Exit 한 줄. S2 공유는 탭 9 영상 칸에 있습니다.</div>
+    <div class="sentence">이번 <b>이 관계</b>에는 <b>만족</b>을 주인으로, <b>목표 과제</b>를 보고, <b>다음 문장</b>을 남긴다. 내용은 다음 Exit 한 줄.</div>
+    <div class="note b">문: A8 — Level 숫자를 설명의 본체로 말하지 않는다. A12 — 허용 게이트가 닫혀 있으면 이 한 줄도 상향을 약속하지 않는다.</div>
+  </div>
+  <div class="card">
+    <h3>S1</h3>
+    <div id="satis" class="grid"></div>
+  </div>
+  <div class="card">
+    <h3>아직 열지 않는 것</h3>
+    <div class="sub">이해됨 · 안전 · 진행 감각 · 자율은 당신 문장이 아니라서 축이 아닙니다. S2는 공유입니다. 탭 9.</div>
+  </div>
+</section>
+
+<section class="panel" id="t9">
+  <div class="card">
+    <h3>영상 칸 — 10분 내외</h3>
+    <div class="sub">새 층이 아닙니다. 오늘 시계 위의 한 업무입니다. 순서는 당신 문장 그대로입니다.</div>
+    <div class="stack">
+      <div class="row"><div class="lv">1</div><div><div class="nm">찍는다</div><div class="ds">고객의 운동 장면.</div></div></div>
+      <div class="row"><div class="lv">2</div><div><div class="nm">최대한 간결하게 편집</div><div class="ds">컷 1.5초 · 장면 6–8 · 길이 10초 내외 · 최대 12초.</div></div></div>
+      <div class="row"><div class="lv">3</div><div><div class="nm">한마디 글</div><div class="ds">각 영상당 한 줄. 어떤 목적, 나의 철학 등.</div></div></div>
+      <div class="row"><div class="lv">4</div><div><div class="nm">공유</div><div class="ds">만족 칸. 그 한마디를 회원이 받는다. 주인은 P2.</div></div></div>
+      <div class="row"><div class="lv">5</div><div><div class="nm">업로드</div><div class="ds">커리어 칸. 그 한마디가 심볼로 남는다. 주인은 P3.</div></div></div>
+    </div>
+    <div class="note">문: 업무 10분. 결과물 최대 12초. 장면은 변수 하나. 글은 영상당 한마디 — 어떤 목적, 나의 철학 등. 두 줄을 쓰지 않는다.</div>
+  </div>
+  <div class="card">
+    <h3>같은 영상, 다른 주인</h3>
+    <div class="grid c2">
+      <div class="sentence">이번 <b>오늘</b>에는 <b>만족</b>을 주인으로, <b>목표 과제</b>를 보고, <b>한마디 글</b>을 남긴다. 수단은 공유. 내용은 어떤 목적, 나의 철학 등.</div>
+      <div class="sentence">이번 <b>오늘</b>에는 <b>커리어</b>를 주인으로, <b>목표 과제</b>를 보고, <b>한마디 글</b>을 남긴다. 수단은 업로드. 내용은 어떤 목적, 나의 철학 등.</div>
+    </div>
+    <div class="note b">한 클립을 두 번 쓸 수 있습니다. 주인을 둘로 두지는 않습니다. 오늘 칸의 주인을 먼저 고릅니다.</div>
+  </div>
+  <div class="card">
+    <h3>S2 · C1 · V1–V4</h3>
+    <div id="videoNodes" class="grid c2"></div>
+  </div>
+</section>
+
+<section class="panel" id="t10">
+  <div class="card">
+    <h3>오늘 — 순환의 가운데</h3>
+    <div class="sub">열기에서 온 Next test가 오늘 변수다. 판정이 그 장면을 고른다.</div>
+    <div class="sentence" id="todayVarLine">오늘 변수 — 확인 필요</div>
+    <div class="note" id="todayArrowLine">Category가 가리키는 층</div>
+    <div class="stack">
+      <div class="row"><div class="lv">칸 1</div><div><div class="nm">판정</div><div class="ds">이번 세션의 핵심 변수 하나만 남긴다. 6–8장면은 그 변수다. Clearance가 닫히면 상향을 찍지 않는다.</div></div></div>
+      <div class="row"><div class="lv">칸 2</div><div><div class="nm">말</div><div class="ds">다음 Exit 한 줄. 글로 강제하지 않는다.</div></div></div>
+      <div class="row"><div class="lv">칸 3</div><div><div class="nm">영상 10분 / 결과 10초</div><div class="ds">컷 1.5초, 장면 6–8, 최대 12초. 각 영상당 한마디 글 — 어떤 목적, 나의 철학 등. 업무는 10분 내외.</div></div></div>
+    </div>
+    <div class="note">문. 영상 칸이 판정 칸을 먹지 않는다. 10분 밖은 영상 업무가 아니다. 공유와 업로드를 한 점수로 묶지 않는다.</div>
+  </div>
+  <div class="card">
+    <h3>순서 노드</h3>
+    <div id="dayNodes" class="grid"></div>
+  </div>
+</section>
+
+<section class="panel" id="t11">
+  <div class="card">
+    <h3>오늘 닫기</h3>
+    <div class="sub">다음 열기가 받을 말과, 어제 글로 읽을 한마디를 남긴다. 두 줄은 다른 칸이다.</div>
+    <div class="grid c2" style="margin-bottom:10px">
+      <div>
+        <label class="f">오늘 이름</label>
+        <input type="text" id="cl_name" placeholder="누구">
+      </div>
+      <div>
+        <label class="f">오늘 프로필</label>
+        <input type="text" id="cl_profile" placeholder="Athlete (BJJ)">
+      </div>
+      <div>
+        <label class="f">오늘 Category</label>
+        <select id="cl_problem">
+          <option value="">확인 필요</option>
+          <option>Sport</option>
+          <option>Fitness</option>
+          <option>Rehab</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid c2">
+      <div>
+        <label class="f">오늘 변수 하나</label>
+        <input type="text" id="cl_var" placeholder="열기 Next test">
+      </div>
+      <div>
+        <label class="f">오늘 Exit 한 줄</label>
+        <input type="text" id="cl_exit" placeholder="확인 필요">
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label class="f">오늘 한마디 글 — 어떤 목적, 나의 철학 등</label>
+      <input type="text" id="cl_line" placeholder="확인 필요">
+    </div>
+    <div style="margin-top:10px">
+      <label class="f">오늘 주인 — 하나</label>
+      <select id="cl_owner">
+        <option value="">확인 필요</option>
+        <option value="share">공유 · 만족</option>
+        <option value="upload">업로드 · 커리어</option>
+      </select>
+    </div>
+    <div id="closeList"></div>
+    <div class="btnrow">
+      <button class="btn pri" id="closeSave">이 닫기를 남긴다</button>
+      <button class="btn" id="closeReset">오늘 체크 지우기</button>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="t12">
+  <div class="card">
+    <h3>다음 세션 열기</h3>
+    <div class="sub">이 순환으로 진행한다. 열기 → 오늘 세 칸 → 닫기 → 열기. Next test가 오늘 변수다.</div>
+    <div class="stack" style="margin-bottom:14px">
+      <div class="row"><div class="lv">1</div><div><div class="nm">열기</div><div class="ds">Prediction · Actual · 유지/수정/폐기 · Next test</div></div></div>
+      <div class="row"><div class="lv">2</div><div><div class="nm">오늘</div><div class="ds">판정(변수 하나) · 말(Exit) · 영상(10분 / 12초 / 한마디 글)</div></div></div>
+      <div class="row"><div class="lv">3</div><div><div class="nm">닫기</div><div class="ds">이름 · 프로필 · Category(S/F/R) · 변수 · Exit · 글 · 주인</div></div></div>
+      <div class="row"><div class="lv">4</div><div><div class="nm">다시 열기</div><div class="ds">Next test가 다음 세션의 어제 변수가 된다</div></div></div>
+    </div>
+    <div class="grid c2">
+      <div>
+        <label class="f">어제 이름</label>
+        <input type="text" id="op_name" placeholder="누구">
+      </div>
+      <div>
+        <label class="f">어제 프로필</label>
+        <input type="text" id="op_profile" placeholder="Athlete (BJJ)">
+      </div>
+      <div>
+        <label class="f">어제 Category</label>
+        <select id="op_problem">
+          <option value="">확인 필요</option>
+          <option>Sport</option>
+          <option>Fitness</option>
+          <option>Rehab</option>
+        </select>
+      </div>
+      <div>
+        <label class="f">어제 변수 하나</label>
+        <input type="text" id="op_var" placeholder="확인 필요">
+      </div>
+      <div>
+        <label class="f">어제 Exit 한 줄</label>
+        <input type="text" id="op_exit" placeholder="확인 필요">
+      </div>
+    </div>
+    <div class="note" id="yestLine" style="margin-top:10px">어제 글 — 확인 필요. Exit가 아니다.</div>
+    <div class="note" id="yestPred" style="margin-top:10px">어제 Prediction — 확인 필요. Actual과 한 줄이 아니다.</div>
+    <div class="grid c2">
+      <div>
+        <label class="f">Prediction — 어제 변수</label>
+        <input type="text" id="op_pred" placeholder="직전 열기. 모르면 확인 필요">
+      </div>
+      <div>
+        <label class="f">Actual — 어제 변수</label>
+        <input type="text" id="op_act" placeholder="오늘 적는다. 모르면 확인 필요">
+      </div>
+      <div>
+        <label class="f">Hypothesis</label>
+        <select id="op_hyp">
+          <option>유지</option>
+          <option>수정</option>
+          <option>폐기</option>
+        </select>
+      </div>
+      <div>
+        <label class="f">Next test — 오늘 변수 하나</label>
+        <input type="text" id="op_next">
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <label class="f">확인 필요</label>
+      <input type="text" id="op_need" placeholder="확정할 수 없는 값">
+    </div>
+    <div class="note b">관찰 사실과 작업가설을 분리한다. 확정할 수 없는 값은 확인 필요로 둔다. Next test가 오늘 변수다. 둘이 되면 안 된다.</div>
+    <div class="sentence" id="openOut" style="display:none"></div>
+    <div class="btnrow">
+      <button class="btn pri" id="openSave">이 열기를 남긴다</button>
+    </div>
+  </div>
+  <div class="card">
+    <h3>R1</h3>
+    <div id="openNodes" class="grid"></div>
+  </div>
+</section>
+
+<div class="footer">Movtrength · 철학 계층 워크숍 v0 · 닫기 다음에 열기.</div>
 </div>
 
 <script>
@@ -430,99 +614,149 @@ const LS = {
 
 const AXIOMS = [
   {id:'A1', t:'평균하지 않는다',
-    y:'잘 되는 축이 못 되는 축을 덮지 않는다. 관련 축 중 결정축이 전체를 말한다.',
-    n:'세 점수를 더해 종합 점수를 만들지 않는다. 아웃풋이 좋아 만족을 덮지 않고, 만족이 좋아 커리어 공백을 덮지 않는다.'},
-  {id:'A2', t:'신분이 문제를 결정하지 않는다',
-    y:'선수도 회복이 문제면 회복이 문제다. 일반인도 과제가 문제면 과제가 문제다.',
-    n:'Athlete / 일반 / 재활 라벨을 사람의 신분으로 쓰지 않는다. 그 라벨은 현재 문제의 종류일 때만 유효하다.'},
-  {id:'A3', t:'상태는 높이가 아니다',
-    y:'지금 허용되는 것과, 해내는 과제의 난이도는 다른 축이다.',
-    n:'"다시 쌓는 중"을 낮은 과제로 자동 번역하지 않는다. 반대로 높은 과제가 허용을 증명하지도 않는다.'},
+    y:'세 축을 평균하지 않는다. 목표 과제에 필요한 축 중 가장 낮은 축이 현재 Level이다. 잘 되는 축이 못 되는 축을 덮지 않게 하는 것이 이 규칙의 목적이다.',
+    n:'평균을 내서 L3으로 조정하지 않는다. Capacity가 높아 보여도 낮은 축을 덮지 않는다.',
+    src:'판정 드릴 §5-2 · 케이스 1'},
+  {id:'A2', t:'Category는 신분이 아니다',
+    y:'Category는 회원의 신분이 아니라 현재 해결해야 할 주요 문제의 종류다. 선수도 부상 중이면 Rehab에 위치한다. Athlete (BJJ)는 Category가 아니라 Profile에 적는다.',
+    n:'선수이므로 Sport, 일반이므로 Fitness로 고정하지 않는다.',
+    src:'§10 · 케이스 6'},
+  {id:'A3', t:'Status와 Level은 별도 축이다',
+    y:'다시 쌓는 국면과 쌓는 높이(과제 난이도)는 다르다. Rebuild여도 Level 3일 수 있다. 통증이 낮아도 수술 조직이 보호 단계면 Level 1일 수 있다. 통증 점수는 Level의 정의가 아니다.',
+    n:'Rebuild니까 Level도 낮게, 통증 없으니 Level을 올린다 — 둘 다 쓰지 않는다.',
+    src:'§0-1 · 케이스 3 · 케이스 9'},
   {id:'A4', t:'보상은 원인이 아니다',
-    y:'보상은 현재 기능을 유지하는 대체 전략이다. 기록은 하되 원인 칸에 넣지 않는다.',
-    n:'반대쪽을 먼저 고치면 가설이 영영 검증되지 않는다.'},
-  {id:'A5', t:'처방은 가설 검증이다',
-    y:'한 칸에서 바꾸는 변수는 하나다. 결과가 그 변수를 가리켜야 한다.',
-    n:'부하·템포·환경·감각을 한 세션에 같이 바꾸지 않는다. 그건 치료가 아니라 소음이다.'},
-  {id:'A6', t:'예측 후 검증한다',
-    y:'먼저 적고 그다음 본다. 틀린 예측이 학습이다.',
-    n:'슬라이더·프로그램·식단을 먼저 움직이고 설명을 나중에 붙이지 않는다. 그건 구경이다.'},
-  {id:'A7', t:'방향은 선언, 크기는 계산',
-    y:'무엇을 돌리는가 / 무엇을 목표로 하는가는 사실로 선언한다. 얼마나·어떻게 나뉘는가는 계산한다.',
-    n:'느낌으로 방향을 바꾸거나, 계산으로 목표를 만들지 않는다.'},
-  {id:'A8', t:'숫자는 설명이 아니다',
-    y:'클라이언트에게 전달하는 것은 다음 Exit 한 줄이다.',
-    n:'레벨 숫자, 체중, 각도, 1RM을 설명의 본체처럼 말하지 않는다. 그건 내부 기록이다.'},
-  {id:'A9', t:'신뢰도 등급을 섞어 읽지 않는다',
-    y:'근거가 다른 값은 같은 표에서 비교하지 않는다. 높은 신뢰도와 낮은 신뢰도를 평균하지 않는다.',
-    n:'모델이 약한 축의 숫자를 강한 축의 숫자 옆에 놓고 결정을 내리지 않는다.'},
-  {id:'A10', t:'철학을 상태로 쓰지 않는다',
-    y:'센터의 신념, 코치의 슬로건은 회원의 오늘 상태가 아니다.',
-    n:'"우리 센터는 Rebuild를 한다"는 회원의 허용 상태가 아니다.'},
-  {id:'A11', t:'목적이 체중·통증이 아니다',
-    y:'체중, 통증, ROM은 수단일 수 있다. 목적은 에너지·출력·과제의 질이다.',
-    n:'가벼워짐, 통증 0, 가동범위 숫자를 목적 칸에 두지 않는다. 그것이 과제의 질을 가리킬 때만 증거다.'},
-  {id:'A12', t:'게이트가 목표보다 앞선다',
-    y:'위험 신호 — 회복 붕괴, 탈수, 머리 띵, 진행성 신경 결손 — 가 오면 진행을 끊는다.',
-    n:'시합, 일정, 커리어 자산, 오늘의 만족이 게이트를 열지 못한다.'},
+    y:'Compensation은 현재 기능을 유지하기 위한 대체 전략이다. 이것을 원인으로 잡으면 반대쪽을 치료하게 되고 가설이 영영 검증되지 않는다.',
+    n:'반대쪽 보폭 감소를 Primary hypothesis에 넣지 않는다.',
+    src:'§3 · 케이스 10'},
+  {id:'A5', t:'처방은 가설 검증 실험이다',
+    y:'처방은 치료가 아니라 가설 검증 실험이다. 한 번에 여러 변수를 올리면 실패 원인을 구분하기 어렵다. 변수가 둘이면 결과가 무엇을 말하는지 알 수 없다. 이번 세션의 핵심 변수 하나만 남긴다.',
+    n:'부하를 낮추고 템포를 늦추고 보드를 대고 시각 차단까지 한 번에 하지 않는다.',
+    src:'§12 · 케이스 12'},
+  {id:'A6', t:'먼저 계산하고 틀린다',
+    y:'보는 대신 먼저 계산하고 틀린다. 슬라이더부터 움직이면 학습이 아니라 구경이다. 예측 카드에 답을 넣고 확인한 다음에 각도를 움직인다.',
+    n:'먼저 움직이고 설명을 나중에 붙이지 않는다.',
+    src:'힘선 탐색기 헤더 · 탭1 사용법'},
+  {id:'A7', t:'방향은 선언, 크기와 힘 분배는 계산',
+    y:'작용 방향은 계산이 아니라 선언이다. 방향은 해부학적 사실로 선언하고, 크기와 힘 분배 — 모멘트암, 회전/압박, 필요 근력, 지레 교환 — 를 계산한다. "이 근육은 Spurt다"가 아니라 "이 각도에서 이 근육은 압박 지배다"가 현장에서 쓸 문장이다.',
+    n:'느낌으로 방향을 바꾸거나, 2D 계산으로 작용 방향을 만들지 않는다.',
+    src:'힘선 탐색기 · 모델 한계'},
+  {id:'A8', t:'다음 Exit 한 줄',
+    y:'고객 설명은 Level 숫자보다 다음 Exit 한 줄을 우선한다.',
+    n:'Level 숫자를 설명의 본체로 말하지 않는다.',
+    src:'§6-2 · 케이스 11'},
+  {id:'A9', t:'축마다 근거가 다르다. 섞어 읽으면 안 된다',
+    y:'신뢰도 등급은 축마다 근거가 다르다. 섞어 읽으면 안 된다. 절대값이 아니라 배열이 만드는 관계의 방향을 본다. 관찰 사실과 작업가설을 분리하고, 확정할 수 없는 값은 확인 필요로 둔다.',
+    n:'모델이 약한 축의 숫자를 강한 축 옆에 놓고 결정을 내리지 않는다.',
+    src:'견갑 3D 명세 · 세션 노트 원칙'},
+  {id:'A10', t:'Rebuild는 센터의 심볼 언어다',
+    y:'Rebuild는 센터의 심볼 언어다. 센터 철학이 아니다. 상태 칸에서는 그대로 쓴다 — 부하로 용량을 다시 쌓는 것이 우선인 허용 상태.',
+    n:'이 단어를 공리로 올리지 않는다. 심볼이라고 해서 상태에서 빼지 않는다.',
+    src:'코치 정정 · §4'},
+  {id:'A11', t:'목적은 에너지 레벨이다',
+    y:'체중 감량의 목적은 가벼워지기가 아니라 에너지 레벨 → RFD·agility 향상이다. 통증 점수는 Level의 정의가 아니다.',
+    n:'가벼워짐, 통증 0을 목적 칸에 두지 않는다. 그것이 과제의 질을 가리킬 때만 증거다.',
+    src:'선수 감량 영양 · §6-3'},
+  {id:'A12', t:'Clearance는 상향의 브레이크다',
+    y:'Clearance Fail이면 Capacity가 아무리 높아 보여도 Level을 올리지 않는다. Clearance는 Level 상향의 브레이크다. 현기증, 머리 띵, 소화 붕괴, 탈수가 오면 진행을 끊는다.',
+    n:'시합 일정이나 통증이 경도라는 이유로 게이트를 열지 않는다. 통증 강도로 Neural Safety를 대체 판단하지 않는다.',
+    src:'§7 규칙 1 · 케이스 8 · 감량 게이트'},
 ];
 
 const LENSES = [
   {id:'P1', t:'아웃풋',
-    y:'클라이언트가 세션 밖에서 해내게 된 것. 과제 수행, 허용 범위의 실제 변화, 전이, 지속.',
-    n:'오늘의 기분, 코치 설명의 유창함, 프로그램이 있어 보이는 것.'},
+    y:'목표 과제에 필요한 축 중 가장 낮은 축이 현재 Level이다. 통증 점수는 Level의 정의가 아니다.',
+    n:'평균을 내서 Level을 만들지 않는다. 잘 되는 축이 못 되는 축을 덮지 않는다.',
+    src:'§5-2 · §6-3'},
   {id:'P2', t:'만족',
-    y:'이 관계를 계속할 이유. 이해됨, 안전, 진행 감각, 자율, 지난 말이 다음 세션에서 맞음.',
-    n:'칭찬, 엔터테인먼트, 즉시 통증 0, 바쁜 스케줄이 주는 안심.'},
+    y:'고객 설명은 Level 숫자보다 다음 Exit 한 줄을 우선한다. 만족 엔진의 첫 축이 이 한 줄이다.',
+    n:'Level 숫자를 설명의 본체로 말하지 않는다.',
+    src:'A8 · §6-2 · 케이스 11'},
   {id:'P3', t:'커리어',
-    y:'이 케이스가 나의 시스템에 남기는 것. 패턴, 설명 문장, 도구화, 포지션 선명도, 위임 가능성.',
-    n:'매출만, 팔로워, 바빠 보이기, 케이스를 쌓지 못하는 반복 노동.'},
+    y:'고객의 운동 장면을 영상으로 찍고 최대한 간결하게 편집한 뒤 업로드한다. 이 업무는 10분 내외로 구성한다.',
+    n:'업로드로 공유를 덮지 않는다. 10분 밖은 이 업무가 아니다. 12초를 넘기지 않는다.',
+    src:'코치 · 영상 칸'},
 ];
 
 const BEINGS = [
-  {id:'E1', t:'의미 / 계약',
-    y:'이 사람이 왜 여기 있는가. 목표의 주인. 시합, 일상 복귀, 통증 없는 계단, 체급.',
-    n:'코치가 멋있어 보이는 목표, 센터의 기본 패키지.'},
-  {id:'E2', t:'과제',
-    y:'해내야 하는 구체적인 일. 감속, 가드 리텐션, 체중 스쿼트, 계체 다음날 스크램블.',
-    n:'막연한 "기능 향상". 과제가 없으면 아웃풋을 측정할 수 없다.'},
-  {id:'E3', t:'조절',
-    y:'그 과제를 어떻게 수행하는가. 타이밍, 전략, 보상, 반복 안정.',
-    n:'ROM 숫자만으로 조절을 대체하지 않는다. 보상 없이 가능한 범위가 여기 산다.'},
-  {id:'E4', t:'역학',
-    y:'힘이 어떻게 나뉘는가. 힘선, 지레, 회전/압박, 부착 배열이 만드는 성격.',
-    n:'근육 이름, 자극 부위 감각, "코어를 조여라" 같은 슬로건.'},
+  {id:'E1', t:'목표 프로필',
+    y:'Profile은 목표 프로필이다. Athlete (BJJ)는 여기에 적는다. Category는 이 층에 앉지 않는다. Category는 현재 해결해야 할 주요 문제의 종류이고, 지금 어느 층이 주인인지를 가리킨다.',
+    n:'회원의 신분으로 Category를 쓰지 않는다. 센터 패키지로 Profile을 대신하지 않는다.',
+    src:'§10 · 케이스 6'},
+  {id:'E2', t:'목표 과제',
+    y:'Level은 과제 난이도다. 목표 과제에 필요한 축 중 가장 낮은 축이 현재 Level이다. ADL·계단·스쿼트가 보상 없이 되지만 러닝·탄성·감속이 미검증이면 Level 3이다. 고객 설명은 다음 Exit 한 줄을 우선한다.',
+    n:'막연한 기능 향상. 과제가 없으면 Level을 읽을 수 없다.',
+    src:'§5-2 · §6-2 · §6-3'},
+  {id:'E3', t:'Control',
+    y:'Controlled ROM은 Control에 넣는다. 이걸 Mobility에 넣으면 Control 결손이 통계에서 사라진다. 보상 없이 조절 가능한 범위, 수행 품질, 반복 시 동작 품질이 여기 산다. Phase는 그 난이도 안에서 학습·적응이 진행된 위치다.',
+    n:'PROM 숫자를 Control로 읽지 않는다. 보상을 원인으로 잡지 않는다.',
+    src:'§5-2 노트 · 케이스 5 · §9'},
+  {id:'E4', t:'힘선',
+    y:'근육 이름이 아니라 부착 배열로 역할을 읽는다. 이 각도에서 힘이 어떻게 나뉘고 지레팔이 얼마인가를 계산한다. "이 근육은 Spurt다"가 아니라 "이 각도에서 이 근육은 압박 지배다"가 현장에서 쓸 문장이다.',
+    n:'자극 부위 감각, "코어를 조여라". 절대값으로 성격을 고정하지 않는다.',
+    src:'힘선 탐색기 · 2주차 목표'},
   {id:'E5', t:'허용',
-    y:'조직·신경·회복이 오늘 무엇을 허락하는가. 게이트가 사는 층.',
-    n:'통증 점수만으로 허용을 읽지 않는다. 의료 제한과 24시간 반응이 여기 산다.'},
+    y:'Clearance는 Level 상향의 브레이크다. Load Tolerance는 수행 중에 버티는가, Recovery Signal은 수행 후·24h·누적이다. Rebuild는 부하로 용량을 다시 쌓는 것이 우선인 허용 상태다. 치유·금기·불안정이 결정을 소유하는 상태가 Protect다.',
+    n:'통증 점수로 허용을 읽지 않는다. Capacity가 높아 보여도 Clearance Fail이면 올리지 않는다.',
+    src:'§7 · §5-2 · §4'},
 ];
 
 const TIMES = [
-  {id:'T1', t:'오늘', y:'바꿀 변수 하나. 세션의 시계.', n:'오늘 안에 시즌을 증명하려 하지 않는다.'},
-  {id:'T2', t:'이 블록', y:'가설이 사는 곳. 보통 2–6주. 예측과 증거가 한 쌍이 되는 시계.', n:'블록을 매주 갈아엎으면 가설이 죽는다.'},
-  {id:'T3', t:'이 관계', y:'만족과 신뢰가 쌓이는 곳. 말이 다음 세션에서 맞았는가가 여기 산다.', n:'한 세션의 기분으로 관계를 판정하지 않는다.'},
-  {id:'T4', t:'이 시즌', y:'커리어 위치가 바뀌는 곳. 어떤 문제 종류를 내 것으로 만들었는가.', n:'바쁜 달을 시즌의 성장으로 착각하지 않는다.'},
+  {id:'T1', t:'오늘',
+    y:'이번 세션의 핵심 변수 하나만 남긴다. 영상 업무는 10분 내외, 결과물은 최대 12초.',
+    n:'10분 밖은 영상 업무가 아니다. 12초를 넘기지 않는다.',
+    src:'A5 · 영상 칸'},
+  {id:'T2', t:'이 블록',
+    y:'처방은 치료가 아니라 가설 검증 실험이다. 가설이 이 시계에 산다.',
+    n:'한 번에 여러 변수를 올리면 실패 원인을 구분하기 어렵다.',
+    src:'A5 · §12'},
+  {id:'T3', t:'이 관계',
+    y:'고객 설명은 Level 숫자보다 다음 Exit 한 줄을 우선한다. 말은 이 시계에 산다.',
+    n:'Level 숫자를 설명의 본체로 말하지 않는다.',
+    src:'A8'},
+  {id:'T4', t:'이 시즌',
+    y:'같은 장면을 업로드한다. 각 영상당 한마디 글 — 어떤 목적, 나의 철학 등.',
+    n:'업로드로 공유를 덮지 않는다.',
+    src:'코치 · C1 · V3'},
 ];
 
 const OBJECTS = [
-  {id:'O1', t:'관찰', y:'사실. 아직 해석이 아닌 것.', n:'"약하다", "불안정하다"는 관찰이 아니라 가설이다.'},
-  {id:'O2', t:'가설', y:'아직 사실이 아닌 것. 검증 가능한 한 문장.', n:'여러 원인을 한 문장에 넣지 않는다.'},
-  {id:'O3', t:'실험', y:'오늘 바꾼 변수 하나. 처방이 여기 앉는다.', n:'프로그램 전체가 실험이 되면 결과가 가리키는 것이 없다.'},
-  {id:'O4', t:'증거', y:'예측 대 실제. 가설을 유지·수정·폐기하는 자리.', n:'좋아 보였다는 인상은 증거가 아니다.'},
-  {id:'O5', t:'다음 문장', y:'클라이언트에게 하는 말. Exit 한 줄. 만족 렌즈의 본체.', n:'내부 판정표를 그대로 읽지 않는다.'},
-  {id:'O6', t:'자산', y:'커리어에 남는 한 줄. 패턴, 도구, 가르칠 수 있는 문장.', n:'세션 노트를 쌓아 두는 것만으로 자산이 되지 않는다. 한 번 더 써야 한다.'},
+  {id:'O1', t:'관찰',
+    y:'관찰 사실과 작업가설을 분리한다. 확정할 수 없는 값은 확인 필요로 둔다.',
+    n:'약하다, 불안정하다는 관찰이 아니라 가설이다.',
+    src:'세션 노트 원칙'},
+  {id:'O2', t:'가설',
+    y:'관찰 사실과 작업가설을 분리한다. 처방은 가설 검증 실험이다.',
+    n:'보상을 원인으로 잡지 않는다.',
+    src:'세션 노트 · A4 · A5'},
+  {id:'O3', t:'실험',
+    y:'이번 세션의 핵심 변수 하나만 남긴다.',
+    n:'변수가 둘이면 결과가 무엇을 말하는지 알 수 없다.',
+    src:'A5 · §12'},
+  {id:'O4', t:'증거',
+    y:'보는 대신 먼저 계산하고 틀린다. 예측 카드에 답을 넣고 확인한 다음에 각도를 움직인다.',
+    n:'먼저 움직이고 설명을 나중에 붙이지 않는다.',
+    src:'A6'},
+  {id:'O5', t:'다음 문장',
+    y:'말은 다음 Exit 한 줄. 글은 각 영상당 한마디 — 어떤 목적, 나의 철학 등. 말과 글은 다른 칸이다.',
+    n:'Level 숫자를 본체로 쓰지 않는다. 말과 글을 한 줄로 강제하지 않는다.',
+    src:'A8 · V3'},
+  {id:'O6', t:'자산',
+    y:'같은 장면을 업로드한다. 각 영상당 한마디 글이 남는다.',
+    n:'10분 밖은 이 업무가 아니다. 12초를 넘기지 않는다.',
+    src:'C1 · V3'},
 ];
 
 const PLUGS = [
   {old:'Clearance', kind:'게이트', map:'L2 E5 허용 × A12',
     why:'Pass / Conditional / Fail은 존재 층이 아니다. 허용 층이 위 칸을 열지 못하게 막는 문이다. Neural Safety · Recovery Signal · Medical Hold는 E5의 세 센서다.'},
   {old:'Tissue–Neural Status', kind:'상태', map:'L2 E5 허용 × L3 블록',
-    why:'Protect · Settle · Rebuild · Open은 허용의 이름이다. 과제 높이가 아니다. A3가 이 자리와 Level을 갈라 놓는다.'},
+    why:'Protect · Settle · Rebuild · Open은 허용의 이름이다. 과제 높이가 아니다. A3가 이 자리와 Level을 갈라 놓는다. Rebuild는 상태 이름이면서 센터의 심볼 언어다. 철학으로 올리지 않는다.'},
   {old:'Functional Level', kind:'읽음값', map:'P1 아웃풋이 E2 과제를 읽음',
     why:'층이 아니다. 목표 과제에 필요한 용량 축의 최솟값이다. 정의역은 과제(E2)이고, 값은 아웃풋 엔진의 출력이다.'},
-  {old:'Capacity · Mobility', kind:'용량 축', map:'E4 역학과 E3 조절의 경계',
-    why:'PROM/AROM 요약은 역학 쪽, Controlled ROM은 조절 쪽. 옛 체계가 이미 갈라 놓은 것을 존재 층이 그대로 받는다.'},
-  {old:'Capacity · Control', kind:'용량 축', map:'L2 E3 조절',
+  {old:'Capacity · Mobility', kind:'용량 축', map:'E4 힘선과 E3 Control의 경계',
+    why:'PROM/AROM 요약은 힘선 쪽, Controlled ROM은 Control 쪽. 옛 체계가 이미 갈라 놓은 것을 존재 층이 그대로 받는다.'},
+  {old:'Capacity · Control', kind:'용량 축', map:'L2 E3 Control',
     why:'보상 없이 과제를 유지하는 능력. Phase가 이 층 위에서 움직인다.'},
   {old:'Capacity · Load Tolerance', kind:'용량 축', map:'L2 E5 허용 · 수행 중',
     why:'수행 중에 버티는가. 수행 후 24h 반응은 같은 E5라도 Recovery Signal(Clearance)로 간다. 시계가 다르다.'},
@@ -530,18 +764,90 @@ const PLUGS = [
     why:'Map · Acquire · Stabilize · Transfer는 난이도 안에서 학습이 진행된 위치다. Level의 시계가 아니다. 그래서 L3=Level이 되면 안 된다.'},
   {old:'Category', kind:'화살표', map:'지금 문제의 주인 층',
     why:'신분이 아니다. Rehab이면 E5가 주인, Sport이면 E2가 주인, Fitness는 E1/E2. 존재 층을 가리키는 화살표로 앉는다.'},
-  {old:'Profile', kind:'계약', map:'L2 E1 의미 / 계약',
-    why:'이 사람이 되려는 목표 프로필. Athlete (BJJ)는 여기 산다. Category와 같은 칸에 두지 않는다.'},
+  {old:'Profile', kind:'계약', map:'L2 E1 목표 프로필',
+    why:'목표 프로필. Athlete (BJJ)는 여기 산다. Category와 같은 칸에 두지 않는다.'},
   {old:'Primary / Secondary / Compensation', kind:'가설 구조', map:'L4 O2 가설',
     why:'존재 층이 아니다. 관찰을 가설로 쓸 때의 자리 규칙이다. 보상은 원인 칸에 못 들어온다(A4).'},
   {old:'처방 변수 하나', kind:'실험', map:'L4 O3 실험 × A5',
     why:'아웃풋 엔진의 손. 오늘 칸에서 바꾸는 것. 프로그램 전체가 실험이 되면 결과가 가리키는 것이 없다.'},
-  {old:'다음 Exit 한 줄', kind:'연결점', map:'L4 O5 다음 문장 → P2 만족',
-    why:'아웃풋 엔진이 만족 엔진에 넘기는 유일한 공식 연결이다. 숫자(Level)는 내부 기록이고, 이 한 줄이 관계 시계로 간다.'},
+  {old:'다음 Exit 한 줄', kind:'연결점', map:'L4 O5 다음 문장 → P2 만족 · S1',
+    why:'아웃풋 엔진이 만족 엔진에 넘기는 첫 축이다. 숫자(Level)는 내부 기록이고, 이 한 줄이 관계 시계로 간다.'},
+];
+
+const SATIS = [
+  {id:'S1', t:'다음 Exit 한 줄',
+    y:'고객 설명은 Level 숫자보다 다음 Exit 한 줄을 우선한다. 만족 칸에 남는 것은 이 한 줄이다.',
+    n:'Level 숫자를 설명의 본체로 말하지 않는다.',
+    src:'A8 · §6-2 · 케이스 11'},
+  {id:'S2', t:'공유',
+    y:'고객의 운동 장면을 영상으로 찍고 최대한 간결하게 편집한 뒤 공유한다. 이 업무는 10분 내외로 구성한다.',
+    n:'공유와 업로드를 한 점수로 묶지 않는다. 12초를 넘기지 않는다.',
+    src:'코치 · 영상 칸'},
+];
+
+const CAREER = [
+  {id:'C1', t:'업로드',
+    y:'같은 장면을 업로드한다. 이 업무는 10분 내외로 구성한다.',
+    n:'업로드의 주인은 커리어다. 10분 밖은 이 업무가 아니다.',
+    src:'코치 · 영상 칸'},
+];
+
+const DAY = [
+  {id:'D1', t:'판정이 장면을 고른다',
+    y:'이번 세션의 핵심 변수 하나만 남긴다. 장면 6–8개는 그 변수가 보이는 반복이다.',
+    n:'프로그램 전체를 찍지 않는다. 장면 수만큼 변수를 늘리지 않는다.',
+    src:'A5 · V1'},
+  {id:'D2', t:'다음 문장을 말로 닫는다',
+    y:'고객 설명은 Level 숫자보다 다음 Exit 한 줄을 우선한다. 말과 글은 다른 칸이다.',
+    n:'말을 빼 글만으로 Exit를 대신하지 않는다.',
+    src:'A8 · V4'},
+  {id:'D3', t:'영상 칸은 10분에 닫는다',
+    y:'찍고 최대한 간결하게 편집한 뒤 공유 및 업로드한다. 이 업무는 10분 내외로 구성한다. 결과물은 컷 1.5초, 장면 6–8개, 최대 12초. 각 영상당 한마디 글 — 어떤 목적, 나의 철학 등.',
+    n:'10분 밖은 이 업무가 아니다. 12초를 넘기지 않는다. 영상 칸이 판정 칸을 먹지 않는다.',
+    src:'코치 · 영상 칸'},
+];
+
+const CUT = [
+  {id:'V1', t:'컷 1.5초 · 장면 6–8 · 최대 12초',
+    y:'컷은 1.5초, 장면 수는 6–8개 정도, 영상 길이는 10초 내외로 끝낸다. 최대 12초.',
+    n:'12초를 넘기지 않는다. 장면을 더 넣어 길이를 늘리지 않는다.',
+    src:'코치 · 컷 기준'},
+  {id:'V2', t:'6–8장면은 변수 하나다',
+    y:'이번 세션의 핵심 변수 하나만 남긴다. 장면 6–8개는 그 변수가 보이는 반복이다.',
+    n:'변수가 둘이면 장면이 무엇을 말하는지 알 수 없다. 장면 수만큼 변수를 늘리지 않는다.',
+    src:'A5 · 코치 컷 기준'},
+  {id:'V3', t:'각 영상당 한마디 글',
+    y:'각 영상당 한마디 글. 어떤 목적, 나의 철학 등.',
+    n:'두 줄을 쓰지 않는다. Level 숫자를 글의 본체로 쓰지 않는다. 철학을 공리 칸에 올리지 않는다.',
+    src:'코치 · 공유 한 줄'},
+  {id:'V4', t:'말과 글은 다른 칸이다',
+    y:'말은 다음 Exit 한 줄. 글은 각 영상당 한마디 — 어떤 목적, 나의 철학 등.',
+    n:'말과 글을 한 줄로 강제하지 않는다. 말을 빼 글만으로 Exit를 대신하지 않는다.',
+    src:'A8 · V3'},
+];
+
+const OPEN = [
+  {id:'R1', t:'다음 세션은 재평가로 연다',
+    y:'Prediction · Actual · Hypothesis는 유지 / 수정 / 폐기 · Next test. Prediction과 Actual은 어제 변수다. 어제 Prediction은 직전 열기에서 온다. Actual은 오늘 적는다. 관찰 사실과 작업가설을 분리하고, 확정할 수 없는 값은 확인 필요로 둔다.',
+    n:'어제 글을 오늘 Exit로 쓰지 않는다. Prediction과 Actual을 한 줄로 강제하지 않는다. Next test가 둘이 되면 오늘 변수가 둘이다.',
+    src:'세션 노트 §7 · A5 · A9'},
+];
+
+const CLOSE = [
+  {id:'K1', t:'이번 세션의 핵심 변수 하나만 남겼다'},
+  {id:'K2', t:'Clearance Fail이면 상향을 찍지 않았다'},
+  {id:'K3', t:'다음 Exit 한 줄을 말했다'},
+  {id:'K4', t:'컷 1.5초, 장면 6–8, 최대 12초'},
+  {id:'K5', t:'6–8장면은 그 변수의 반복이다'},
+  {id:'K6', t:'각 영상당 한마디 글 — 어떤 목적, 나의 철학 등'},
+  {id:'K7', t:'말과 글을 한 줄로 강제하지 않았다'},
+  {id:'K8', t:'공유와 업로드의 주인을 하나로 골랐다'},
+  {id:'K9', t:'영상 업무는 10분 내외로 닫았다'},
 ];
 
 const votes = LS.get('ontoVotes', {});
 const cells = LS.get('ontoCells', []);
+function closeKey(){ return 'ontoClose_'+new Date().toISOString().slice(0,10); }
 
 function voteOf(id){ return votes[id] || ''; }
 
@@ -552,6 +858,7 @@ function renderNode(item, extra){
     <h4>${item.t}</h4>
     <div class="why">${item.y}</div>
     <div class="not"><b>아닌 것.</b> ${item.n}</div>
+    ${item.src?`<div class="src">${item.src}</div>`:''}
     <div class="votes">
       <button type="button" data-v="ok" class="${v==='ok'?'on ok':''}">승인</button>
       <button type="button" data-v="edit" class="${v==='edit'?'on edit':''}">수정</button>
@@ -621,7 +928,7 @@ function renderSaved(){
 }
 
 function counts(){
-  const ids = [...AXIOMS,...LENSES,...BEINGS,...TIMES,...OBJECTS].map(x=>x.id);
+  const ids = [...AXIOMS,...LENSES,...BEINGS,...TIMES,...OBJECTS,...SATIS,...CAREER,...DAY,...CUT,...OPEN].map(x=>x.id);
   const ok = ids.filter(id=>voteOf(id)==='ok').length;
   const edit = ids.filter(id=>voteOf(id)==='edit').length;
   const park = ids.filter(id=>voteOf(id)==='park').length;
@@ -641,7 +948,17 @@ function paint(){
   $('#beings').innerHTML = BEINGS.map(a=>renderNode(a,' · 존재')).join('');
   $('#times').innerHTML = TIMES.map(a=>renderNode(a,' · 시간')).join('');
   $('#objects').innerHTML = OBJECTS.map(a=>renderNode(a,' · 기록')).join('');
-  ['axioms','lenses','beings','times','objects'].forEach(id=>bindVotes($('#'+id)));
+  if($('#satis')) $('#satis').innerHTML = SATIS.filter(a=>a.id==='S1').map(a=>renderNode(a,' · 만족')).join('');
+  if($('#videoNodes')) $('#videoNodes').innerHTML =
+    SATIS.filter(a=>a.id==='S2').map(a=>renderNode(a,' · 만족')).join('')+
+    CAREER.map(a=>renderNode(a,' · 커리어')).join('')+
+    CUT.map(a=>renderNode(a,' · 컷')).join('');
+  if($('#dayNodes')) $('#dayNodes').innerHTML = DAY.map(a=>renderNode(a,' · 오늘')).join('');
+  if($('#openNodes')) $('#openNodes').innerHTML = OPEN.map(a=>renderNode(a,' · 열기')).join('');
+  ['axioms','lenses','beings','times','objects','satis','videoNodes','dayNodes','openNodes'].forEach(id=>{ const el=$('#'+id); if(el) bindVotes(el); });
+  renderClose();
+  renderTodayVar();
+  fillCloseFields();
   const keep = id => voteOf(id)!=='park';
   fillSelect($('#pickLens'), LENSES, keep);
   fillSelect($('#pickBeing'), BEINGS, keep);
@@ -651,6 +968,67 @@ function paint(){
   renderSaved();
   counts();
   renderPlugs();
+}
+
+function catArrow(c){
+  if(c==='Rehab') return 'Rehab → 허용이 주인';
+  if(c==='Sport') return 'Sport → 목표 과제가 주인';
+  if(c==='Fitness') return 'Fitness → 프로필 또는 과제. 한쪽으로 고정하지 않음';
+  return 'Category가 가리키는 층 — 확인 필요';
+}
+
+function renderTodayVar(){
+  const el = $('#todayVarLine');
+  if(!el) return;
+  const last = LS.get('ontoOpen', {});
+  const close = LS.get('ontoClose', {});
+  const today = new Date().toISOString().slice(0,10);
+  const v = (last.op_next||'').trim();
+  const name = (close.at===today?close.name:last.op_name)||'';
+  const prof = (close.at===today?close.profile:last.op_profile)||'';
+  const cat = (close.at===today?close.problem:last.op_problem)||'';
+  el.innerHTML = (name||prof||v)
+    ? `${name?name+' · ':''}${prof||''}${v?` · 변수 <b>${v}</b>`:' · 변수 확인 필요'}`
+    : `오늘 변수 — 확인 필요. 12번 탭에서 Next test를 남긴다.`;
+  const ar = $('#todayArrowLine');
+  if(ar) ar.textContent = catArrow(cat);
+}
+
+function fillCloseFields(){
+  const today = new Date().toISOString().slice(0,10);
+  const rec = LS.get('ontoClose', {});
+  const open = LS.get('ontoOpen', {});
+  const v = $('#cl_var'), e = $('#cl_exit'), g = $('#cl_line'), o = $('#cl_owner');
+  const p = $('#cl_profile'), pr = $('#cl_problem'), nm = $('#cl_name');
+  if(!v || !e) return;
+  if(rec.at === today){
+    if(rec.var) v.value = rec.var;
+    if(rec.exit) e.value = rec.exit;
+    if(g && rec.line) g.value = rec.line;
+    if(o && rec.owner) o.value = rec.owner;
+    if(nm && rec.name) nm.value = rec.name;
+    if(p && (rec.profile||rec.who)) p.value = rec.profile||rec.who;
+    if(pr && rec.problem) pr.value = rec.problem;
+  } else if(!v.value && open.op_next){
+    v.value = open.op_next;
+  }
+}
+
+function renderClose(){
+  const box = $('#closeList');
+  if(!box) return;
+  const st = LS.get(closeKey(), {});
+  const done = CLOSE.filter(c=>st[c.id]).length;
+  box.innerHTML = CLOSE.map(c=>{
+    const on = !!st[c.id];
+    return `<div class="chk ${on?'done':''}"><input type="checkbox" data-k="${c.id}" ${on?'checked':''}><label>${c.t}</label></div>`;
+  }).join('')+`<div style="margin-top:10px;font-size:12px;color:var(--ink3)">닫힘 ${done}/${CLOSE.length}</div>`;
+  box.querySelectorAll('input').forEach(cb=>cb.onchange=()=>{
+    const s = LS.get(closeKey(), {});
+    s[cb.dataset.k] = cb.checked;
+    LS.set(closeKey(), s);
+    renderClose();
+  });
 }
 
 function renderPlugs(){
@@ -717,6 +1095,91 @@ $('#exportDraft').onclick = ()=>{
 };
 
 paint();
+const resetBtn = $('#closeReset');
+if(resetBtn) resetBtn.onclick = ()=>{
+  LS.set(closeKey(), {});
+  renderClose();
+};
+const closeSave = $('#closeSave');
+if(closeSave) closeSave.onclick = ()=>{
+  const today = new Date().toISOString().slice(0,10);
+  const v = (($('#cl_var')||{}).value||'').trim();
+  const exit = (($('#cl_exit')||{}).value||'').trim();
+  const line = (($('#cl_line')||{}).value||'').trim();
+  const owner = (($('#cl_owner')||{}).value||'').trim();
+  const name = (($('#cl_name')||{}).value||'').trim();
+  const profile = (($('#cl_profile')||{}).value||'').trim();
+  const problem = (($('#cl_problem')||{}).value||'').trim();
+  if(!name){ alert('이름이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+  if(!profile){ alert('프로필이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+  if(!problem){ alert('Category를 고른다. Sport / Fitness / Rehab.'); return; }
+  if(!exit){ alert('Exit 한 줄이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+  if(!line){ alert('한마디 글이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+  if(!owner){ alert('주인을 하나로 고른다. 공유 또는 업로드.'); return; }
+  const rec = {at:today, name, profile, problem, var:v||'확인 필요', exit, line, owner};
+  LS.set('ontoClose', rec);
+  const log = LS.get('ontoCloseLog', []);
+  log.unshift(rec);
+  LS.set('ontoCloseLog', log.slice(0,30));
+  renderTodayVar();
+  alert('닫기를 남겼습니다. 다음 열기가 이 Exit를 어제 말로 받습니다.');
+};
+const clProblem = $('#cl_problem');
+if(clProblem) clProblem.onchange = renderTodayVar;
+
+(function(){
+  const ids = ['op_name','op_profile','op_problem','op_var','op_exit','op_pred','op_act','op_hyp','op_next','op_need'];
+  const today = new Date().toISOString().slice(0,10);
+  const last = LS.get('ontoOpen', {});
+  const yest = LS.get('ontoClose', {});
+  if(last.at === today){
+    ids.forEach(id=>{ const el=$('#'+id); if(el && last[id]) el.value = last[id]; });
+  } else {
+    const v = $('#op_var'), e = $('#op_exit'), p = $('#op_profile'), pr = $('#op_problem'), nm = $('#op_name');
+    if(nm && !nm.value) nm.value = yest.name || '';
+    if(p && !p.value) p.value = yest.profile || yest.who || '';
+    if(pr && !pr.value) pr.value = yest.problem || '';
+    if(v && !v.value) v.value = yest.var || last.op_next || '';
+    if(e && !e.value) e.value = yest.exit || '';
+    const pred = $('#op_pred');
+    if(pred && !pred.value) pred.value = last.op_pred || '';
+  }
+  const yl = $('#yestLine');
+  if(yl){
+    const line = (yest.at && yest.at !== today) ? (yest.line||'').trim() : '';
+    const ownerName = yest.owner==='share' ? '공유 · 만족' : yest.owner==='upload' ? '업로드 · 커리어' : '';
+    yl.innerHTML = (line || ownerName)
+      ? `어제 글 — ${line||'확인 필요'} · 어제 주인 — ${ownerName||'확인 필요'} · Exit가 아니다.`
+      : `어제 글 — 확인 필요. Exit가 아니다.`;
+  }
+  const yp = $('#yestPred');
+  if(yp){
+    const prev = (last.at && last.at !== today) ? (last.op_pred||'').trim() : '';
+    yp.textContent = prev
+      ? `어제 Prediction — ${prev}. Actual과 한 줄이 아니다.`
+      : `어제 Prediction — 확인 필요. Actual과 한 줄이 아니다.`;
+  }
+  const save = $('#openSave');
+  if(!save) return;
+  save.onclick = ()=>{
+    const row = {};
+    ids.forEach(id=> row[id] = ($('#'+id)||{}).value || '');
+    row.at = today;
+    if((row.op_pred||'').trim()==='' ){ alert('Prediction이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+    if((row.op_act||'').trim()==='' ){ alert('Actual이 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+    if((row.op_next||'').trim()==='' ){ alert('Next test가 확인 필요면 확인 필요라고 적는다. 비워 두지 않는다.'); return; }
+    LS.set('ontoOpen', row);
+    const log = LS.get('ontoOpenLog', []);
+    log.unshift(row);
+    LS.set('ontoOpenLog', log.slice(0,30));
+    const out = $('#openOut');
+    if(out){
+      out.style.display = 'block';
+      out.innerHTML = `오늘 변수 = <b>${row.op_next}</b>. 10번 탭 판정이 이 장면을 고른다.`;
+    }
+    renderTodayVar();
+  };
+})();
 </script>
 </body>
 </html>
