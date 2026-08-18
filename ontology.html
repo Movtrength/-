@@ -132,6 +132,30 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
 .footer{text-align:center;font-size:12px;color:var(--ink3);padding:24px 0 8px}
 .q{border-top:1px solid var(--line2);padding-top:10px;margin-top:10px}
 .q b{display:block;margin-bottom:4px}
+.engines{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:840px){.engines{grid-template-columns:1fr}}
+.engine{border:1px solid var(--line);border-radius:12px;padding:13px 14px;min-height:100%}
+.engine.full{background:var(--blue-bg);border-color:transparent}
+.engine.hole{background:var(--bg);border-style:dashed}
+.engine .kicker{font-size:11px;font-weight:800;letter-spacing:.04em;color:var(--ink3);margin-bottom:4px}
+.engine h4{font-size:16px;margin-bottom:6px}
+.engine ul{margin:8px 0 0;padding-left:18px;font-size:13px}
+.plug{
+  display:grid;grid-template-columns:140px 1fr 1fr;gap:8px;align-items:start;
+  border:1px solid var(--line2);border-radius:11px;padding:10px 12px;margin:0 0 8px;background:var(--bg);
+  cursor:pointer;
+}
+.plug:hover,.plug.on{border-color:var(--blue);background:var(--blue-bg)}
+.plug .old{font-weight:800;font-size:13.5px}
+.plug .map{font-size:12.5px;color:var(--ink2)}
+.plug .kind{font-size:11px;font-weight:800;color:var(--ink3)}
+@media(max-width:720px){.plug{grid-template-columns:1fr}}
+.sysmap{display:grid;gap:8px}
+.sysmap .band{border-radius:12px;padding:12px 14px;border:1px solid var(--line2)}
+.sysmap .band h4{font-size:13px;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;font-weight:700;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.chip.ghost{opacity:.45;border-style:dashed}
 </style>
 </head>
 <body>
@@ -159,6 +183,7 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
   <button type="button" data-tab="t4">4 시간</button>
   <button type="button" data-tab="t5">5 기록</button>
   <button type="button" data-tab="t6">6 결합</button>
+  <button type="button" data-tab="t7">7 삽입</button>
 </nav>
 
 <section class="panel on" id="t0">
@@ -309,7 +334,91 @@ button.btn.pri{background:var(--blue);border-color:var(--blue);color:#fff}
   </div>
 </section>
 
-<div class="footer">Movtrength · 철학 계층 워크숍 v0 · 기존 판정 체계는 이 파일 밖에 그대로 둡니다.</div>
+<section class="panel" id="t7">
+  <div class="card">
+    <h3>삽입하면 나오는 그림 — 세 엔진, 하나만 채워짐</h3>
+    <div class="sub">Clearance·Level을 새 계층의 한 층으로 올리면 프랑켄슈타인이 됩니다. 올바른 자리는 <b>아웃풋 렌즈의 판정 엔진</b>입니다. 체계 전체가 커지는 것이 아니라, 빈 엔진 두 개가 보입니다.</div>
+    <div class="sysmap">
+      <div class="band" style="background:var(--purple-bg);border-color:transparent">
+        <h4>L0 공리 — 세 엔진 공통의 문</h4>
+        <div class="chips">
+          <span class="chip">A1 평균 금지</span>
+          <span class="chip">A3 상태 ≠ 높이</span>
+          <span class="chip">A5 변수 하나</span>
+          <span class="chip">A8 Exit 한 줄</span>
+          <span class="chip">A12 게이트 우선</span>
+        </div>
+      </div>
+      <div class="engines">
+        <div class="engine full">
+          <div class="kicker">P1 · 채워짐</div>
+          <h4>아웃풋 엔진</h4>
+          <div class="sub" style="margin:0">여기로 Clearance·Level이 들어옵니다. 새 층이 아니라 이 렌즈의 절차입니다.</div>
+          <ul>
+            <li>게이트: Clearance</li>
+            <li>허용 상태: Status</li>
+            <li>과제 높이: Level</li>
+            <li>학습 위치: Phase</li>
+            <li>용량 축: Mobility · Control · Load</li>
+          </ul>
+        </div>
+        <div class="engine hole">
+          <div class="kicker">P2 · 구멍</div>
+          <h4>만족 엔진</h4>
+          <div class="sub" style="margin:0">연결점만 있습니다. 판정 절차는 아직 없습니다.</div>
+          <ul>
+            <li>연결: 다음 문장 (Exit 한 줄)</li>
+            <li>시계: 이 관계</li>
+            <li>없는 것: 이해됨·안전·진행감각을 가르는 축</li>
+          </ul>
+        </div>
+        <div class="engine hole">
+          <div class="kicker">P3 · 구멍</div>
+          <h4>커리어 엔진</h4>
+          <div class="sub" style="margin:0">연결점만 있습니다. 케이스가 자산이 되는 절차가 없습니다.</div>
+          <ul>
+            <li>연결: 자산 한 줄</li>
+            <li>시계: 이 시즌</li>
+            <li>없는 것: 패턴화 · 도구화 · 위임 가능 판정</li>
+          </ul>
+        </div>
+      </div>
+      <div class="band">
+        <h4>L2 존재 — 아웃풋 엔진이 꽂히는 자리</h4>
+        <div class="chips">
+          <span class="chip">E1 의미 ← Profile / Category의 주인</span>
+          <span class="chip">E2 과제 ← Level의 정의역</span>
+          <span class="chip">E3 조절 ← Control, Phase</span>
+          <span class="chip">E4 역학 ← 처방의 근거</span>
+          <span class="chip">E5 허용 ← Clearance, Status, Load</span>
+        </div>
+      </div>
+    </div>
+    <div class="note b">
+      한 줄. Clearance·Level은 철학 체계가 아닙니다. <b>아웃풋 렌즈가 E2·E3·E5를 읽을 때 쓰는 절차</b>입니다.
+      넣으면 체계가 완성되는 것이 아니라, 만족과 커리어가 같은 문법의 빈 엔진임이 드러납니다.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>옛 라벨이 앉는 자리</h3>
+    <div class="sub">클릭하면 왜 그 칸인지 한 줄이 열립니다. 층으로 승격되지 않는 것들이 중요합니다.</div>
+    <div id="plugs"></div>
+    <div class="sentence" id="plugWhy" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <h3>이 그림이 금지하는 착각</h3>
+    <ul class="tight">
+      <li><b>Clearance를 L2의 여섯 번째 층으로 올리지 않는다.</b> 허용(E5)의 게이트 판정이다.</li>
+      <li><b>Level을 L3의 다섯 번째 시계로 올리지 않는다.</b> 과제(E2)의 읽음값이다. Status·Phase와 독립인 이유가 여기 있다.</li>
+      <li><b>Category를 신분 층으로 올리지 않는다.</b> 지금 문제의 주인이 어느 존재 층인가를 가리키는 화살표다. Rehab이면 E5가 주인, Sport이면 E2가 주인.</li>
+      <li><b>세 엔진을 평균해 "좋은 코칭 점수"를 만들지 않는다.</b> 아웃풋 엔진이 잘 돌아도 만족·커리어 구멍을 덮지 못한다.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="footer">Movtrength · 철학 계층 워크숍 v0 · 기존 판정 체계는 아웃풋 엔진으로만 삽입한다.</div>
 </div>
 
 <script>
@@ -402,6 +511,33 @@ const OBJECTS = [
   {id:'O4', t:'증거', y:'예측 대 실제. 가설을 유지·수정·폐기하는 자리.', n:'좋아 보였다는 인상은 증거가 아니다.'},
   {id:'O5', t:'다음 문장', y:'클라이언트에게 하는 말. Exit 한 줄. 만족 렌즈의 본체.', n:'내부 판정표를 그대로 읽지 않는다.'},
   {id:'O6', t:'자산', y:'커리어에 남는 한 줄. 패턴, 도구, 가르칠 수 있는 문장.', n:'세션 노트를 쌓아 두는 것만으로 자산이 되지 않는다. 한 번 더 써야 한다.'},
+];
+
+const PLUGS = [
+  {old:'Clearance', kind:'게이트', map:'L2 E5 허용 × A12',
+    why:'Pass / Conditional / Fail은 존재 층이 아니다. 허용 층이 위 칸을 열지 못하게 막는 문이다. Neural Safety · Recovery Signal · Medical Hold는 E5의 세 센서다.'},
+  {old:'Tissue–Neural Status', kind:'상태', map:'L2 E5 허용 × L3 블록',
+    why:'Protect · Settle · Rebuild · Open은 허용의 이름이다. 과제 높이가 아니다. A3가 이 자리와 Level을 갈라 놓는다.'},
+  {old:'Functional Level', kind:'읽음값', map:'P1 아웃풋이 E2 과제를 읽음',
+    why:'층이 아니다. 목표 과제에 필요한 용량 축의 최솟값이다. 정의역은 과제(E2)이고, 값은 아웃풋 엔진의 출력이다.'},
+  {old:'Capacity · Mobility', kind:'용량 축', map:'E4 역학과 E3 조절의 경계',
+    why:'PROM/AROM 요약은 역학 쪽, Controlled ROM은 조절 쪽. 옛 체계가 이미 갈라 놓은 것을 존재 층이 그대로 받는다.'},
+  {old:'Capacity · Control', kind:'용량 축', map:'L2 E3 조절',
+    why:'보상 없이 과제를 유지하는 능력. Phase가 이 층 위에서 움직인다.'},
+  {old:'Capacity · Load Tolerance', kind:'용량 축', map:'L2 E5 허용 · 수행 중',
+    why:'수행 중에 버티는가. 수행 후 24h 반응은 같은 E5라도 Recovery Signal(Clearance)로 간다. 시계가 다르다.'},
+  {old:'Phase', kind:'학습 위치', map:'E2×E3 × L3 블록',
+    why:'Map · Acquire · Stabilize · Transfer는 난이도 안에서 학습이 진행된 위치다. Level의 시계가 아니다. 그래서 L3=Level이 되면 안 된다.'},
+  {old:'Category', kind:'화살표', map:'지금 문제의 주인 층',
+    why:'신분이 아니다. Rehab이면 E5가 주인, Sport이면 E2가 주인, Fitness는 E1/E2. 존재 층을 가리키는 화살표로 앉는다.'},
+  {old:'Profile', kind:'계약', map:'L2 E1 의미 / 계약',
+    why:'이 사람이 되려는 목표 프로필. Athlete (BJJ)는 여기 산다. Category와 같은 칸에 두지 않는다.'},
+  {old:'Primary / Secondary / Compensation', kind:'가설 구조', map:'L4 O2 가설',
+    why:'존재 층이 아니다. 관찰을 가설로 쓸 때의 자리 규칙이다. 보상은 원인 칸에 못 들어온다(A4).'},
+  {old:'처방 변수 하나', kind:'실험', map:'L4 O3 실험 × A5',
+    why:'아웃풋 엔진의 손. 오늘 칸에서 바꾸는 것. 프로그램 전체가 실험이 되면 결과가 가리키는 것이 없다.'},
+  {old:'다음 Exit 한 줄', kind:'연결점', map:'L4 O5 다음 문장 → P2 만족',
+    why:'아웃풋 엔진이 만족 엔진에 넘기는 유일한 공식 연결이다. 숫자(Level)는 내부 기록이고, 이 한 줄이 관계 시계로 간다.'},
 ];
 
 const votes = LS.get('ontoVotes', {});
@@ -514,6 +650,28 @@ function paint(){
   compose();
   renderSaved();
   counts();
+  renderPlugs();
+}
+
+function renderPlugs(){
+  const box = $('#plugs');
+  if(!box) return;
+  box.innerHTML = PLUGS.map((p,i)=>`
+    <div class="plug" data-i="${i}">
+      <div class="old">${p.old}</div>
+      <div class="kind">${p.kind}</div>
+      <div class="map">${p.map}</div>
+    </div>`).join('');
+  box.querySelectorAll('.plug').forEach(el=>{
+    el.onclick = ()=>{
+      box.querySelectorAll('.plug').forEach(x=>x.classList.remove('on'));
+      el.classList.add('on');
+      const p = PLUGS[+el.dataset.i];
+      const why = $('#plugWhy');
+      why.style.display = 'block';
+      why.innerHTML = `<b>${p.old}</b> → ${p.map}<br>${p.why}`;
+    };
+  });
 }
 
 document.querySelectorAll('nav.tabs button').forEach(btn=>{
