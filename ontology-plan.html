@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movtrength · 온톨로지 받기</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#16181d;--ink2:#5b616e;--ink3:#8b909c;--line:#e3e6ec;--blue:#2f6df6;--blue-bg:#eef3ff;--amber:#b06d05;--amber-bg:#fdf3e3}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#171a20;--ink:#e9ecf1;--ink2:#a2a9b6;--ink3:#727a89;--line:#262b34;--blue:#7aa2ff;--blue-bg:#1a2338;--amber:#e8b360;--amber-bg:#2b2113}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:15px;line-height:1.6;padding:16px 14px 80px}
+h1{font-size:22px;margin:0 0 6px}
+h2{font-size:16px;margin:0 0 8px}
+.sub{font-size:13px;color:var(--ink3);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.dl{grid-template-columns:1fr}}
+button,.btn{border:0;background:var(--blue);color:#fff;padding:10px 14px;border-radius:9px;font-weight:700;font:inherit;width:100%;text-align:center;text-decoration:none;display:block}
+button.ghost,.btn.ghost{background:var(--blue-bg);color:var(--blue)}
+.note{background:var(--amber-bg);border-left:3px solid var(--amber);padding:8px 10px;font-size:13px;margin:10px 0 0}
+.sent{background:var(--blue-bg);border-radius:10px;padding:10px 12px;font-weight:650;margin:0 0 10px}
+ul,ol{margin:8px 0 0;padding-left:20px}
+li{margin:4px 0}
+a{color:var(--blue)}
+.tag{display:inline-block;font-size:11px;font-weight:800;color:var(--ink3);background:var(--bg);border-radius:999px;padding:2px 8px;margin:0 4px 4px 0}
+pre{white-space:pre-wrap;word-break:break-word;background:var(--bg);border-radius:10px;padding:10px;font-size:12px;overflow:auto;max-height:40vh}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>온톨로지 받기</h1>
+  <p class="sub">구성 계획과 지금까지 잠긴 칸. JSON과 HTML을 받을 수 있습니다.<br>
+  이 장은 덤프입니다. 지금 답할 것은 <a href="today.html">today.html</a> 파란 칸입니다.</p>
+  <div class="dl">
+    <button type="button" id="dlJson">JSON 받기</button>
+    <button type="button" id="dlHtml">HTML 받기</button>
+    <a class="btn ghost" href="today.html" download="today.html">오늘 한 장 HTML</a>
+    <a class="btn ghost" href="지금.md" download="지금.md">지금.md 받기</a>
+  </div>
+  <p class="note" id="dlMsg">전화에서는 파일이 바로 안 내려가면, 아래 링크를 길게 눌러 저장하세요.</p>
+  <p class="sub" style="margin:10px 0 0">
+    JSON: <a id="jsonLink" href="ontology.json">ontology.json</a><br>
+    HTML: <a id="htmlLink" href="ontology-plan.html">ontology-plan.html</a>
+  </p>
+</div>
+
+<div id="view"></div>
+
+<script type="application/json" id="dump">
+{
+  "meta": {
+    "title": "Movtrength coaching ontology",
+    "as_of": "2026-08-18",
+    "owner": "Movtrength",
+    "note": "최종 온톨로지는 HTML이 아니다. HTML은 잠근 칸을 오늘 돌리는 창이다.",
+    "final_form": "확인 필요",
+    "feedback_rule": "입력칸은 채우지 마세요. 채팅에만 답하면 됩니다. 세 줄이 맞으면 승인. 틀리면 그 번호와 고친 한 줄.",
+    "pages": {
+      "today": "https://movtrength.github.io/-/today.html",
+      "plan_html": "https://movtrength.github.io/-/ontology-plan.html",
+      "plan_json": "https://movtrength.github.io/-/ontology.json",
+      "lock_md": "https://github.com/Movtrength/-/blob/main/지금.md",
+      "explorer": "https://movtrength.github.io/-/",
+      "workshop_parked": "https://movtrength.github.io/-/ontology.html"
+    },
+    "do_not": [
+      "힘선 탐색기 index.html을 고치지 않는다",
+      "live ontology.html을 12탭 워크숍으로 덮지 않는다",
+      "시계라는 말을 쓰지 않는다",
+      "커리어 렌즈의 주인 = 업로드를 쓰지 않는다",
+      "말과 글을 한 줄로 강제하지 않는다",
+      "Category를 신분으로 쓰지 않는다",
+      "Rebuild를 센터 철학으로 되돌리지 않는다",
+      "엔진·렌즈·화살 단계를 평균하지 않는다",
+      "영상을 커리어 칸에 바로 올리지 않는다"
+    ]
+  },
+  "plan": {
+    "binding": "오늘의 칸 = 렌즈 1 + 존재 1 + 시간 1 + 기록 1",
+    "binding_note": "공리는 문이다. 층이 아니다. 평균하지 않는다.",
+    "goals": ["클라이언트 아웃풋", "클라이언트 만족", "커리어 관리"],
+    "layers": {
+      "L0": {
+        "name": "공리",
+        "role": "문. 층이 아니다.",
+        "items": [
+          "평균하지 않는다",
+          "Category ≠ 신분",
+          "Status ≠ Level",
+          "보상 ≠ 원인",
+          "처방은 변수 하나",
+          "먼저 계산하고 틀린다",
+          "방향 선언 / 크기 계산",
+          "Exit 한 줄",
+          "신뢰도를 섞지 않는다",
+          "Rebuild는 심볼 언어. 철학을 상태로 쓰지 않는다. 상태 이름으로는 그대로 쓴다",
+          "목적은 에너지 레벨",
+          "Clearance는 상향의 브레이크. 게이트가 목표보다 앞선다"
+        ]
+      },
+      "L1": {
+        "name": "렌즈",
+        "items": ["아웃풋", "만족", "커리어"],
+        "open": "렌즈 1은 확인 필요",
+        "not": "오늘 렌즈를 커리어로 두지 않음. 평균하지 않음."
+      },
+      "L2": {
+        "name": "존재",
+        "items": ["목표 프로필", "목표 과제", "Control", "힘선", "허용"],
+        "category_is": "화살. 신분이 아니다.",
+        "category_values": ["Sport", "Fitness", "Rehab"],
+        "arrows": {
+          "Rehab": "Rehab → 허용이 주인",
+          "Sport": "Sport → 목표 과제가 주인",
+          "Fitness": "Fitness → 프로필 또는 과제. 한쪽으로 고정하지 않음"
+        }
+      },
+      "L3": {
+        "name": "시간",
+        "do_not_say": "시계",
+        "gate": "블록이나 시즌을 오늘 안에서 증명하지 않는다.",
+        "items": {
+          "오늘": {"status": "locked", "text": "바꿀 변수 하나."},
+          "이 블록": {"status": "locked", "text": "가설이 사는 곳. 보통 2–6주. 예측과 증거가 한 쌍.", "not": "블록을 매주 갈아엎으면 가설이 죽는다."},
+          "이 관계": {"status": "locked", "text": "만족과 신뢰가 쌓이는 곳. 말이 다음 세션에서 맞았는가.", "not": "한 세션의 기분으로 관계를 판정하지 않는다."},
+          "이 시즌": {"status": "locked", "text": "훈련의 과정을 응용, 적용해보는 기간. 어떤 문제 종류를 내 것으로 만들었는가.", "not": "바쁜 달을 시즌의 성장으로 착각하지 않는다.", "not_career": "이 시즌 ≠ 커리어 칸. 평균하지 않는다. 시즌이 잘 돌아도 커리어 구멍을 덮지 못한다."}
+        }
+      },
+      "L4": {
+        "name": "기록",
+        "record_1": "확인 필요. 말과 글을 한 기록으로 합치지 않는다.",
+        "seats": {
+          "관찰": {"status": "locked", "text": "관찰 = Actual. 사실. 닫기에 적는다."},
+          "가설": {"status": "locked", "text": "가설 = Hypothesis. 유지 / 수정 / 폐기."},
+          "실험": {"status": "locked", "text": "실험 = Next test = 오늘 변수 하나."},
+          "증거": {"status": "locked", "text": "증거 = 예측 대 실제. 열기의 Prediction · Actual · Hypothesis."},
+          "다음 문장": {"status": "locked", "text": "다음 문장 = 말 Exit / 글 한마디. 다른 칸."},
+          "자산": {"status": "확인 필요", "text": "세션 노트 쌓기만으로 자산이 되지 않는다. 한 번 더 써야 한다."}
+        }
+      }
+    },
+    "output_engine": {
+      "name": "Clearance · Level",
+      "role": "아웃풋 엔진. 새 층이 아니다.",
+      "file": "index.html",
+      "rule": "고치지 않는다. 그대로."
+    },
+    "career_path": {
+      "status": "locked",
+      "arrow": "영상 → 만족 → 누적 → 커리어",
+      "누적": "누적(영상, 만족의 누적) → 커리어",
+      "today": "오늘 영상 · 만족이 쌓인다. 누적 칸으로 오늘을 닫지 않는다.",
+      "not": "평균하지 않는다. 영상을 커리어 칸에 바로 올리지 않는다."
+    }
+  },
+  "loop": {
+    "cycle": "열기 → 오늘 → 닫기 → 열기",
+    "one_variable": "한 변수 = 열기 Prediction → 오늘 판정 → 닫기 Actual",
+    "timeline": [
+      {"step": "열기", "does": "어제 Prediction · 어제 Actual을 받는다. Hypothesis. Next test = 오늘 변수. 오늘 Prediction을 적는다."},
+      {"step": "오늘", "does": "판정 · 말 · 영상. 오늘 변수 하나."},
+      {"step": "닫기", "does": "오늘 Actual을 적는다. Exit · 글. 주인 하나를 넣지 않는다."},
+      {"step": "다음 열기", "does": "오늘 Prediction → 어제 Prediction. 오늘 Actual → 어제 Actual."}
+    ]
+  },
+  "locked": {
+    "close_owner": "닫기의 주인 하나(공유 · 업로드)는 뺀다. 오늘 끝은 영상 · 만족. 누적 칸으로 오늘을 닫지 않는다.",
+    "open_receives": [
+      "어제 Prediction — 직전 열기의 오늘 Prediction",
+      "어제 Actual — 직전 닫기",
+      "Hypothesis: 유지 / 수정 / 폐기",
+      "Next test = 오늘 변수 하나 (비우지 않음. 모르면 확인 필요)",
+      "오늘 Prediction — 오늘 변수. 먼저 계산하고 틀린다",
+      "어제 이름 / 어제 프로필 / 어제 Category / 어제 변수 / 어제 Exit는 직전 닫기에서 옴",
+      "어제 글은 Exit가 아님"
+    ],
+    "today": [
+      "판정 — Next test 장면. 변수 하나. Clearance Fail이면 상향 금지",
+      "Rehab → 허용이 주인",
+      "Sport → 목표 과제가 주인",
+      "Fitness → 프로필 또는 과제 (한쪽으로 고정하지 않음)",
+      "말 — 다음 Exit 한 줄",
+      "영상 업무 10분",
+      "컷 1.5초",
+      "장면 6–8 = 그 변수의 반복",
+      "길이 10초 내외, 최대 12초",
+      "각 영상당 한마디 글 — 어떤 목적, 나의 철학 등",
+      "말과 글은 다른 칸. 한 줄로 강제하지 않음"
+    ],
+    "close_leaves": [
+      "이름 — 누구",
+      "프로필 — 목표 프로필. 예: Athlete (BJJ). 이름과 다른 칸",
+      "Category — Sport / Fitness / Rehab. 선수도 부상 중이면 Rehab. 프로필은 그대로.",
+      "변수",
+      "Exit 한 줄 → 다음 열기의 어제 말",
+      "Actual → 다음 열기의 어제 Actual",
+      "한마디 글 → 다음 열기의 어제 글"
+    ],
+    "close_checks": [
+      {"id": "K1", "text": "변수 하나만 남겼다"},
+      {"id": "K2", "text": "Fail이면 상향을 찍지 않았다"},
+      {"id": "K3", "text": "Exit 한 줄을 말했다"},
+      {"id": "K4", "text": "컷 1.5초 · 6–8 · 최대 12초"},
+      {"id": "K5", "text": "장면은 그 변수"},
+      {"id": "K6", "text": "한마디 글"},
+      {"id": "K7", "text": "말과 글을 한 줄로 강제하지 않았다"},
+      {"id": "K9", "text": "업무 10분 내외"}
+    ],
+    "close_checks_note": "여덟 문. K8 주인 하나는 뺐다.",
+    "axioms_this_loop_uses": [
+      "평균하지 않는다",
+      "처방은 변수 하나",
+      "Exit 한 줄 (말)",
+      "Clearance는 상향의 브레이크",
+      "Rebuild는 심볼 언어. 상태 이름으로는 그대로 씀",
+      "관찰과 가설을 분리. 확정 못 하면 확인 필요"
+    ],
+    "name_profile_category": {
+      "name_neq_profile": "이름 ≠ 프로필",
+      "example": "Athlete injured → Category Rehab. 프로필은 Athlete (BJJ) 그대로."
+    }
+  },
+  "open": {
+    "cell": "렌즈 1. 주인 하나를 뺐다.",
+    "lines": [
+      "오늘 렌즈 = 만족. 오늘 끝은 영상 · 만족",
+      "렌즈 1은 확인 필요",
+      "당신 한 줄로 고친다"
+    ],
+    "not": "오늘 렌즈를 커리어로 두지 않음. 평균하지 않음.",
+    "status": "아직 승인 전"
+  },
+  "확인_필요": [
+    "렌즈 1",
+    "기록 1 — 말과 글을 한 기록으로 합치지 않는다",
+    "자산",
+    "최종이 웹인지 노트인지",
+    "누적과 자산을 같은 칸으로 둘지 — 잠그지 않음"
+  ],
+  "dropped": [
+    {"item": "시계", "why": "조수가 만든 말. 쓰지 않는다. 문: 블록이나 시즌을 오늘 안에서 증명하지 않는다."},
+    {"item": "커리어 렌즈의 주인 = 업로드", "why": "쓰지 않음."},
+    {"item": "닫기의 주인 하나 (공유 · 업로드)", "why": "뺀다. 오늘 끝은 영상 · 만족."},
+    {"item": "사람 / 상황", "why": "조수 말. 이름 + 프로필 + Category로 바꿈."}
+  ],
+  "files": {
+    "do_not_edit": ["index.html"],
+    "parked_workshop": "ontology.html",
+    "review": ["today.html", "지금.md"],
+    "this_dump": ["ontology.json", "ontology-plan.html"]
+  }
+}
+</script>
+<script>
+const dump = JSON.parse(document.getElementById('dump').textContent);
+const pretty = JSON.stringify(dump, null, 2);
+
+function card(title, body){
+  return `<div class="card"><h2>${title}</h2>${body}</div>`;
+}
+function lis(arr){ return `<ul>${arr.map(x=>`<li>${x}</li>`).join('')}</ul>`; }
+
+const L = dump.plan.layers;
+const T = L.L3.items;
+const R = L.L4.seats;
+const open = dump.open;
+
+document.getElementById('view').innerHTML = [
+  card('지금 열린 칸', `
+    <div class="sent">${open.cell}</div>
+    <p class="sub">${open.status}</p>
+    ${lis(open.lines.map((t,i)=>`${i+1}. ${t}`))}
+    <p class="note">아닌 것: ${open.not}</p>
+  `),
+  card('묶음', `
+    <div class="sent">${dump.plan.binding}</div>
+    <p>${dump.plan.binding_note}</p>
+    <p>목표: ${dump.plan.goals.join(' · ')}</p>
+    <p>${dump.meta.note}</p>
+    <p>최종 형태: ${dump.meta.final_form}</p>
+  `),
+  card('L0 공리', `<p class="sub">${L.L0.role}</p>${lis(L.L0.items)}`),
+  card('L1 렌즈', `
+    <p>${L.L1.items.join(' · ')}</p>
+    <p>${L.L1.open}</p>
+    <p class="note">아닌 것: ${L.L1.not}</p>
+  `),
+  card('L2 존재', `
+    <p>${L.L2.items.join(' · ')}</p>
+    <p>Category = ${L.L2.category_is} ${L.L2.category_values.join(' / ')}</p>
+    ${lis(Object.values(L.L2.arrows))}
+  `),
+  card('L3 시간', `
+    <p>쓰지 않는 말: ${L.L3.do_not_say}</p>
+    <div class="sent">${L.L3.gate}</div>
+    <ul>
+      <li><b>오늘</b> — ${T['오늘'].text}</li>
+      <li><b>이 블록</b> — ${T['이 블록'].text} ${T['이 블록'].not}</li>
+      <li><b>이 관계</b> — ${T['이 관계'].text} ${T['이 관계'].not}</li>
+      <li><b>이 시즌</b> — ${T['이 시즌'].text} ${T['이 시즌'].not} ${T['이 시즌'].not_career}</li>
+    </ul>
+  `),
+  card('L4 기록', `
+    <p>기록 1: ${L.L4.record_1}</p>
+    <ul>
+      ${Object.entries(R).map(([k,v])=>`<li><b>${k}</b> <span class="tag">${v.status}</span> — ${v.text}</li>`).join('')}
+    </ul>
+  `),
+  card('아웃풋 엔진', `<p><b>${dump.plan.output_engine.name}</b> — ${dump.plan.output_engine.role} ${dump.plan.output_engine.file} ${dump.plan.output_engine.rule}</p>`),
+  card('커리어 화살', `
+    <div class="sent">${dump.plan.career_path.arrow}</div>
+    <p>${dump.plan.career_path.누적}</p>
+    <p>${dump.plan.career_path.today}</p>
+    <p class="note">아닌 것: ${dump.plan.career_path.not}</p>
+  `),
+  card('순환', `
+    <div class="sent">${dump.loop.cycle}</div>
+    <p>${dump.loop.one_variable}</p>
+    <ol>${dump.loop.timeline.map(x=>`<li><b>${x.step}</b> — ${x.does}</li>`).join('')}</ol>
+  `),
+  card('잠긴 칸', `
+    <p>${dump.locked.close_owner}</p>
+    <p><b>열기가 받는 것</b></p>${lis(dump.locked.open_receives)}
+    <p><b>오늘</b></p>${lis(dump.locked.today)}
+    <p><b>닫기가 남기는 것</b></p>${lis(dump.locked.close_leaves)}
+    <p><b>여덟 문</b> — ${dump.locked.close_checks_note}</p>
+    ${lis(dump.locked.close_checks.map(x=>`${x.id} ${x.text}`))}
+    <p><b>이 순환이 쓰는 공리</b></p>${lis(dump.locked.axioms_this_loop_uses)}
+    <p>${dump.locked.name_profile_category.name_neq_profile}. ${dump.locked.name_profile_category.example}</p>
+  `),
+  card('확인 필요', lis(dump['확인_필요'])),
+  card('뺀 것', lis(dump.dropped.map(x=>`<b>${x.item}</b> — ${x.why}`))),
+  card('하지 말 것', lis(dump.meta.do_not)),
+  card('원문 JSON', `<pre>${pretty.replace(/</g,'&lt;')}</pre>`)
+].join('');
+
+function saveBlob(name, blob){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  document.getElementById('dlMsg').textContent = name + '을 받았습니다. 안 내려가면 아래 링크를 길게 누르세요.';
+}
+
+document.getElementById('dlJson').onclick = ()=>{
+  saveBlob('ontology.json', new Blob([pretty], {type:'application/json'}));
+};
+document.getElementById('dlHtml').onclick = ()=>{
+  const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  saveBlob('ontology-plan.html', new Blob([html], {type:'text/html'}));
+};
+
+async function offerFile(href, name, type){
+  try{
+    const res = await fetch(href);
+    if(!res.ok) return;
+    const blob = new Blob([await res.blob()], {type});
+    const url = URL.createObjectURL(blob);
+    const a = document.getElementById(name==='ontology.json' ? 'jsonLink' : 'htmlLink');
+    if(a && href.endsWith(name)) a.href = url;
+  }catch(_){}
+}
+offerFile('ontology.json','ontology.json','application/json');
+</script>
+</body>
+</html>
