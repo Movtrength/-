@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Movtrength · 커맨드 받기</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--ink:#16181d;--ink2:#5b616e;--ink3:#8b909c;--line:#e3e6ec;--blue:#2f6df6;--blue-bg:#eef3ff;--amber:#b06d05;--amber-bg:#fdf3e3;--ok:#1f7a4d;--ok-bg:#e8f6ee}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1115;--card:#171a20;--ink:#e9ecf1;--ink2:#a2a9b6;--ink3:#727a89;--line:#262b34;--blue:#7aa2ff;--blue-bg:#1a2338;--amber:#e8b360;--amber-bg:#2b2113;--ok:#7dcea0;--ok-bg:#163022}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:15px;line-height:1.55;padding:16px 14px 80px}
+h1{font-size:22px;margin:0 0 6px}
+h2{font-size:15px;margin:0 0 8px}
+.sub{font-size:13px;color:var(--ink3);margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center}
+.stat b{display:block;font-size:22px;line-height:1.1}
+.stat span{font-size:11px;color:var(--ink3);font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.grid{grid-template-columns:1fr}}
+.cell{background:var(--bg);border-radius:10px;padding:10px}
+.cell b{display:block;font-size:12px;margin-bottom:4px}
+.cell p{margin:0;font-size:13px;color:var(--ink2)}
+.tag{display:inline-block;font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 7px;margin:0 4px 4px 0}
+.ok{background:var(--ok-bg);color:var(--ok)}
+.open{background:var(--blue-bg);color:var(--blue)}
+.need{background:var(--amber-bg);color:var(--amber)}
+.off{background:var(--line);color:var(--ink3)}
+.sent{background:var(--blue-bg);border-radius:10px;padding:10px 12px;font-weight:650;margin:0 0 10px}
+.note{background:var(--amber-bg);border-left:3px solid var(--amber);padding:8px 10px;font-size:13px;margin:10px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--bg);border-radius:999px;padding:4px 10px;font-size:12.5px;font-weight:650}
+a{color:var(--blue)}
+.btn{border:0;background:var(--blue);color:#fff;padding:10px 14px;border-radius:9px;font-weight:700;font:inherit;width:100%;text-align:center;text-decoration:none;display:block}
+.btn.ghost{background:var(--blue-bg);color:var(--blue)}
+.dl{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+ul,ol{margin:8px 0 0;padding-left:18px}
+li{margin:4px 0;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--ink3);font-size:11px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>MOVT · 커맨드 받기</h1>
+  <p class="sub">RUBRIC을 분석한 덤프. 새 온톨로지가 아닙니다. 판은 <a href="dashboard.html">dashboard.html</a>. 지금 답할 것은 <a href="today.html">today.html</a> 파란 칸입니다.</p>
+  <div class="stats">
+    <div class="stat"><b>3</b><span>레인</span></div>
+    <div class="stat"><b>4</b><span>가져올 문</span></div>
+    <div class="stat"><b>6</b><span>버릴 패널</span></div>
+  </div>
+  <div class="sent">세 레인을 한 창에 둔다. 평균하지 않는다.</div>
+  <p class="sub" style="margin:0">코칭 오늘 · 커서 빌드 · 볼트 받기. 점수 하나로 합치지 않는다.</p>
+  <div class="dl">
+    <a class="btn" href="command.json">JSON</a>
+    <a class="btn ghost" href="dashboard.html">잠긴 칸의 판</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>그록봇이 본 것</h2>
+  <p class="sub">같은 레포에 그록봇 4개를 나눠 보냈습니다. 이 분석 자체가 3-agent 문턱을 넘었습니다.</p>
+  <ol>
+    <li>RUBRIC 10패널 정보구조</li>
+    <li>이미 있는 MOVT OS</li>
+    <li>커서 + 그록 빌드 좌석</li>
+    <li>옵시디언 볼트가 받아도 되는 것</li>
+  </ol>
+  <p class="note">이 장에서 렌즈 1을 승인하지 마세요. 열린 칸은 그대로 둡니다.</p>
+</div>
+
+<div class="card">
+  <h2>RUBRIC이 실제로 하는 일</h2>
+  <p class="sent">채팅이 아니라 파일이 사는 시각 층. 교실 프롬프트 한 장으로 깐다. 0 npm.</p>
+  <p>한두 에이전트는 채팅으로 됩니다. 이름 있는 에이전트가 셋이면 누가 도는지 작업기억이 못 버팁니다. 커리큘럼이 이것을 <b>3-agent threshold</b>라고 부릅니다.</p>
+  <p class="sub" style="margin:10px 0 0">아닌 것: <a href="https://rubric-app.com">rubric-app.com</a> 거버넌스 SDK. 다른 제품입니다.</p>
+  <p class="sub">원전: <a href="https://www.getrubric.app/">getrubric.app</a> · <a href="https://robonuggets-agentic-ai-foundations.vercel.app/">Volume 5</a> · <a href="https://moderncreator.app/2026-05-25-jay-e-robonuggets-claude-code-just-got-10x-more-powerful-agentic-microapps">Jay E 워크스루</a></p>
+</div>
+
+<div class="card">
+  <h2>10패널을 다섯 층으로</h2>
+  <div class="grid">
+    <div class="cell"><span class="tag off">껍질</span><b>Scaffold</b><p>탭 · 테마 · 라우트. 도메인이 아니다.</p></div>
+    <div class="cell"><span class="tag open">정체</span><b>Icons · Agents</b><p>얼굴과 누가 도는지. 보여주기.</p></div>
+    <div class="cell"><span class="tag open">능력</span><b>Skill Trees</b><p>스킬 지도. 중복을 본다. 편집은 채팅.</p></div>
+    <div class="cell"><span class="tag need">과정</span><b>Flows · Crons</b><p>파이프라인 재생과 반복 잡 달력.</p></div>
+    <div class="cell"><span class="tag ok">시간</span><b>Sprints</b><p>이번 주 판 + 백로그. 에이전트가 읽는다.</p></div>
+    <div class="cell"><span class="tag ok">유물</span><b>Generations · Docs · Links</b><p>미디어 로그 · 마크다운 · 북마크.</p></div>
+  </div>
+  <p class="note">보여주기(Agents, Skill Trees, Flows 데모)와 돌리기(Sprints, Docs, Generations)를 한 피드로 합치지 않는 것이 핵심입니다.</p>
+</div>
+
+<div class="card">
+  <h2>가져올 문 · 버릴 패널</h2>
+  <p class="sub">10개를 복사하면 두 번째 온톨로지가 됩니다.</p>
+  <div class="chips" style="margin-bottom:10px">
+    <span class="chip">파일 = API</span>
+    <span class="chip">패널 = 명사 하나</span>
+    <span class="chip">채팅은 밖</span>
+    <span class="chip">셋이면 멈춤</span>
+  </div>
+  <table>
+    <thead><tr><th>패널</th><th>판정</th><th>이유</th></tr></thead>
+    <tbody>
+      <tr><td>Docs</td><td><span class="tag ok">가져옴</span></td><td>지금.md · ontology.json · _INDEX.md. 이미 있는 읽기 층.</td></tr>
+      <tr><td>Links</td><td><span class="tag ok">얇게</span></td><td>today · dashboard · 에이전트 URL. 패널이 아니라 목록.</td></tr>
+      <tr><td>Agents</td><td><span class="tag need">퓨즈만</span></td><td>팀 그리드 금지. 같은 레포 RUNNING ≥ 3 이면 멈춤.</td></tr>
+      <tr><td>Sprints</td><td><span class="tag off">버림</span></td><td>Notion Project가 이미 있다. 두 번째 판을 만들지 않는다.</td></tr>
+      <tr><td>Flows</td><td><span class="tag off">버림</span></td><td>한 그록은 좌석 사슬이다. DAG가 아니다.</td></tr>
+      <tr><td>Skill Trees</td><td><span class="tag off">버림</span></td><td>모델이 하나다. 능력 그래프는 옷.</td></tr>
+      <tr><td>Crons</td><td><span class="tag off">버림</span></td><td>반복 잡이 생기기 전엔 달력이 옷.</td></tr>
+      <tr><td>Generations</td><td><span class="tag off">버림</span></td><td>코칭 영상 10분과 만난다. 영상을 커리어 칸에 바로 올리지 않는다.</td></tr>
+      <tr><td>Icons</td><td><span class="tag off">버림</span></td><td>전화 카드에 얼굴 갤러리가 필요 없다.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>당신에게 맞는 형태 — 세 레인 한 창</h2>
+  <div class="sent">코칭은 오늘을 돈다. 빌드는 한 런을 돈다. 볼트는 받지, 돌리지 않는다.</div>
+  <div class="grid">
+    <div class="cell">
+      <span class="tag ok">레인 1</span>
+      <b>코칭</b>
+      <p>today.html이 돈다. dashboard.html은 잠긴 칸의 판. 한 변수 = Prediction → 판정 → Actual. 이 카드에서 승인하지 않는다.</p>
+    </div>
+    <div class="cell">
+      <span class="tag open">레인 2</span>
+      <b>빌드</b>
+      <p>커서 + 그록. 좌석 여섯: intake · plan · implement · verify · pr · handoff. 머신 점(RUNNING)은 좌석이 아니다.</p>
+    </div>
+    <div class="cell">
+      <span class="tag need">레인 3</span>
+      <b>볼트</b>
+      <p>_INDEX.md 여섯 제목. 닫힌 날과 닫힌 빌드만 받는다. Dataview 시계를 홈에 두지 않는다.</p>
+    </div>
+    <div class="cell">
+      <span class="tag off">퓨즈</span>
+      <b>Count</b>
+      <p>같은 레포 RUNNING이 셋이면 새 빌드를 열지 않는다. 이 분석 중 에이전트 6이 같은 레포에 떴다.</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>빌드 카드 넷 + 퓨즈</h2>
+  <ol>
+    <li><b>Seat</b> — 지금 좌석 · 머신 점 · 에이전트 링크 · 이번 런 변수 하나</li>
+    <li><b>Ask</b> — today.html과 같은 의식. 세 줄. 승인 또는 그 번호와 고친 한 줄. 물을 것이 없으면 숨긴다.</li>
+    <li><b>Evidence</b> — 프리뷰 · 스크린샷 · 무엇을 눌렀나. 아티팩트 없으면 Verify가 아니다.</li>
+    <li><b>Handoff</b> — 브랜치 · PR · CI · 다음 에이전트가 읽을 파일</li>
+  </ol>
+  <p class="note">머신 상태와 작업 좌석을 한 알약으로 합치지 않는다. RUNNING이 진척이 아니다. IDLE이 끝이 아니다.</p>
+</div>
+
+<div class="card">
+  <h2>볼트 홈 — _INDEX.md</h2>
+  <p class="sub">손 링크. 쿼리가 필요하면 제목이 틀린 것입니다.</p>
+  <ol>
+    <li><b>Inbox</b> — 아직 안 꽂은 닫기</li>
+    <li><b>이 블록</b> — 가설 + 마지막 증거 쌍. 디데이 없음</li>
+    <li><b>Area</b> — 이름 · 프로필 · Category · 마지막 변수</li>
+    <li><b>말 (Exit)</b> — 혼자 칸</li>
+    <li><b>글 (한마디)</b> — 혼자 칸. 말과 한 줄로 강제하지 않는다</li>
+    <li><b>자산</b> — 다시 쓴 것만. 비어 있으면 맞다</li>
+  </ol>
+  <p class="note">볼트 홈에 RUNNING · 스프린트 · 열린 열기 · 최근 수정을 올리면, 블록을 오늘 안에서 증명하는 것과 같은 버그입니다.</p>
+</div>
+
+<div class="card">
+  <h2>닫힌 것이 어디로 가나</h2>
+  <div class="grid">
+    <div class="cell"><b>닫힌 코칭 날</b><p>이름·프로필·Category → Area. Actual → 관찰. Exit → 말. 한마디 → 글. 증거 쌍 → 이 블록. 자산은 한 번 더 쓸 때만.</p></div>
+    <div class="cell"><b>닫힌 빌드</b><p>프롬프트·디프 → Inbox. 2–6주 가설이면 이 블록. 다시 쓴 문장만 자산. RUNNING=false를 홈에 쓰지 않는다.</p></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>이미 있는 OS와 충돌하면</h2>
+  <ul>
+    <li>index.html을 앱 껍질로 다시 짜지 않는다. 주차 아웃풋 엔진. 고치지 않는다.</li>
+    <li>dashboard.html의 1 · 5 · 4 통계에 빌드 숫자를 넣지 않는다.</li>
+    <li>볼트를 최종 온톨로지로 선언하지 않는다. 최종이 웹인지 노트인지는 확인 필요.</li>
+    <li>세션 노트 더미를 자산이나 커리어로 부르지 않는다.</li>
+    <li>닫기의 주인을 업로드·공유·퍼블리시로 되돌리지 않는다.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>아직 안 닫는 것</h2>
+  <ul>
+    <li>렌즈 1</li>
+    <li>기록 1 — 말과 글을 한 기록으로 합치지 않는다</li>
+    <li>자산</li>
+    <li>최종이 웹인지 노트인지</li>
+    <li>누적과 자산을 같은 칸으로 둘지</li>
+  </ul>
+  <p class="sub">이 덤프는 창의 자리를 고릅니다. 열린 칸을 채우지 않습니다.</p>
+</div>
+
+<div class="card">
+  <h2>다음 창 — 아직 안 만듦</h2>
+  <p>세 레인을 나란히 보여주는 <b>command.html</b>은 아직 없습니다. 승인이 있으면 그때 만듭니다. 이 장은 설계 덤프입니다.</p>
+  <div class="dl">
+    <a class="btn" href="today.html">오늘 한 장</a>
+    <a class="btn ghost" href="dashboard.html">잠긴 칸의 판</a>
+  </div>
+</div>
+</body>
+</html>
