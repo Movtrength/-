@@ -162,7 +162,6 @@ function boxBlurChannel(src, dst, w, h, radius) {
 
 function blurRgb(data, w, h, radius) {
   const len = w * h;
-  const out = new Float32Array(len * 4);
   const ch = [new Float32Array(len), new Float32Array(len), new Float32Array(len)];
   const blurred = [new Float32Array(len), new Float32Array(len), new Float32Array(len)];
 
@@ -176,27 +175,20 @@ function blurRgb(data, w, h, radius) {
     boxBlurChannel(ch[c], blurred[c], w, h, radius);
   }
 
-  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
-    out[i] = blurred[0][p];
-    out[i + 1] = blurred[1][p];
-    out[i + 2] = blurred[2][p];
-  }
-
-  return out;
+  return blurred;
 }
 
 function applyDefinition(data, w, h, value) {
   const t = value / 100;
   if (t === 0) return;
 
-  const blurred = blurRgb(data, w, h, 1);
+  const [blurR, blurG, blurB] = blurRgb(data, w, h, 1);
   const amount = t * 1.2;
 
-  for (let i = 0; i < data.length; i += 4) {
-    for (let c = 0; c < 3; c++) {
-      const orig = data[i + c];
-      data[i + c] = clamp(orig + amount * (orig - blurred[i + c]));
-    }
+  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+    data[i] = clamp(data[i] + amount * (data[i] - blurR[p]));
+    data[i + 1] = clamp(data[i + 1] + amount * (data[i + 1] - blurG[p]));
+    data[i + 2] = clamp(data[i + 2] + amount * (data[i + 2] - blurB[p]));
   }
 }
 
@@ -204,13 +196,13 @@ function applyNoiseReduction(data, w, h, value) {
   const t = value / 100;
   if (t === 0) return;
 
-  const blurred = blurRgb(data, w, h, 2);
+  const [blurR, blurG, blurB] = blurRgb(data, w, h, 2);
   const mix = t * 0.65;
 
-  for (let i = 0; i < data.length; i += 4) {
-    for (let c = 0; c < 3; c++) {
-      data[i + c] = clamp(data[i + c] * (1 - mix) + blurred[i + c] * mix);
-    }
+  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+    data[i] = clamp(data[i] * (1 - mix) + blurR[p] * mix);
+    data[i + 1] = clamp(data[i + 1] * (1 - mix) + blurG[p] * mix);
+    data[i + 2] = clamp(data[i + 2] * (1 - mix) + blurB[p] * mix);
   }
 }
 

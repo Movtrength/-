@@ -13,6 +13,7 @@ const downloadBtn = document.getElementById("downloadBtn");
 const replaceBtn = document.getElementById("replaceBtn");
 const workspace = document.getElementById("workspace");
 const appError = document.getElementById("appError");
+const processingStatus = document.getElementById("processingStatus");
 
 let originalBitmap = null;
 let processedCanvas = null;
@@ -37,12 +38,23 @@ function populatePresetSelect() {
   }
 }
 
+function nextFrame() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(resolve));
+  });
+}
+
+function setProcessingVisible(visible) {
+  if (processingStatus) processingStatus.hidden = !visible;
+}
+
 function setControlsDisabled(disabled) {
   if (presetSelect) presetSelect.disabled = disabled;
   if (downloadBtn) downloadBtn.disabled = disabled;
   if (replaceBtn) replaceBtn.disabled = disabled;
   if (compareSlider) compareSlider.disabled = disabled;
   if (workspace) workspace.setAttribute("aria-busy", disabled ? "true" : "false");
+  setProcessingVisible(disabled);
 }
 
 function revokeObjectUrls() {
@@ -111,6 +123,7 @@ async function processImage() {
 
   setControlsDisabled(true);
   hideError();
+  await nextFrame();
 
   try {
     const preset = getPresetById(activePresetId);
@@ -126,6 +139,8 @@ async function processImage() {
     if (generation !== processGeneration) return false;
 
     console.error(err);
+    processedCanvas = null;
+    clearCompareLayers();
     showError();
     return false;
   } finally {
@@ -160,7 +175,7 @@ async function handleFileChange(event) {
       compareBefore.src = originalObjectUrl;
     }
 
-    originalBitmap = await createImageBitmap(file);
+    originalBitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
     activePresetId = presetSelect?.value || PRESETS[0].id;
 
     const processed = await processImage();
@@ -220,7 +235,6 @@ function resetToUpload(clearInput = true) {
 function handleReplace() {
   resetToUpload();
   uploadInput?.focus();
-  document.querySelector(".hero")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 async function handleDownload() {
@@ -232,8 +246,10 @@ async function handleDownload() {
     const anchor = document.createElement("a");
     anchor.href = url;
     anchor.download = "film-sensibility.png";
+    document.body.appendChild(anchor);
     anchor.click();
-    URL.revokeObjectURL(url);
+    anchor.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   } catch (err) {
     console.error(err);
     showError();

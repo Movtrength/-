@@ -23,16 +23,16 @@
         <p class="hero__tagline">
           iPhone 사진 앱의 필름 레시피를 브라우저에서 바로 적용하세요.
         </p>
-        <label class="upload-cta" for="uploadInput">
+        <label class="upload-cta">
           <span class="upload-cta__label">사진 선택</span>
           <span class="upload-cta__hint">JPEG · PNG · WebP</span>
+          <input
+            id="uploadInput"
+            class="visually-hidden"
+            type="file"
+            accept="image/*"
+          />
         </label>
-        <input
-          id="uploadInput"
-          type="file"
-          accept="image/*"
-          hidden
-        />
         <p id="appError" class="app-error app-error--hero" role="alert" hidden>
           이 이미지를 처리할 수 없습니다
         </p>
@@ -67,6 +67,7 @@
           <div class="compare__handle" aria-hidden="true">
             <span class="compare__handle-grip"></span>
           </div>
+          <p id="processingStatus" class="compare__processing" hidden>처리 중…</p>
         </div>
       </div>
 

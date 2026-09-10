@@ -135,6 +135,7 @@ body {
 
 /* ── Upload CTA ────────────────────────────────────────────────── */
 .upload-cta {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -158,6 +159,24 @@ body {
 
 .upload-cta:active {
   transform: translateY(0);
+}
+
+.upload-cta:has(:focus-visible) {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px var(--color-accent-glow);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .upload-cta__label {
@@ -244,10 +263,6 @@ body.has-workspace .hero__privacy {
 .compare__layer {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-start;
-  padding: 1rem;
 }
 
 .compare__layer--before {
@@ -289,8 +304,9 @@ body.has-workspace .hero__privacy {
 }
 
 .compare__badge {
-  position: relative;
+  position: absolute;
   z-index: 1;
+  bottom: 1rem;
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -300,11 +316,31 @@ body.has-workspace .hero__privacy {
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   pointer-events: none;
+  white-space: nowrap;
+}
+
+.compare__badge--before {
+  right: 1rem;
 }
 
 .compare__badge--after {
-  align-self: flex-end;
-  margin-left: auto;
+  left: 1rem;
+}
+
+.compare__processing {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text);
+  background: rgba(26, 24, 22, 0.72);
+  pointer-events: none;
 }
 
 .compare__handle {
