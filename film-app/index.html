@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>필름감성 — Film Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="hero">
+      <div class="hero__inner fade-up">
+        <p class="hero__eyebrow">Film Lab</p>
+        <h1 id="brand" class="hero__brand">필름감성</h1>
+        <p class="hero__tagline">
+          iPhone 사진 앱의 필름 레시피를 브라우저에서 바로 적용하세요.
+        </p>
+        <label class="upload-cta" for="uploadInput">
+          <span class="upload-cta__label">사진 선택</span>
+          <span class="upload-cta__hint">JPEG · PNG · WebP</span>
+        </label>
+        <input
+          id="uploadInput"
+          type="file"
+          accept="image/*"
+          hidden
+        />
+      </div>
+    </header>
+
+    <main id="workspace" class="workspace" hidden>
+      <div class="workspace__controls fade-up">
+        <label class="control-label" for="presetSelect">프리셋</label>
+        <select id="presetSelect" class="preset-select"></select>
+      </div>
+
+      <div id="compare" class="compare" aria-label="보정 전후 비교">
+        <div class="compare__stage">
+          <div class="compare__layer compare__layer--before">
+            <span class="compare__badge">원본</span>
+          </div>
+          <div class="compare__layer compare__layer--after">
+            <span class="compare__badge">보정</span>
+          </div>
+          <div class="compare__handle" aria-hidden="true">
+            <span class="compare__handle-grip"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workspace__actions fade-up">
+        <button id="downloadBtn" type="button" class="btn btn--primary">
+          PNG 다운로드
+        </button>
+        <button id="replaceBtn" type="button" class="btn btn--secondary">
+          다른 사진 선택
+        </button>
+      </div>
+    </main>
+
+    <footer class="footer fade-up">
+      <p>사진은 기기 안에서만 처리됩니다</p>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
