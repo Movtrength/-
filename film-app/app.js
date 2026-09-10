@@ -148,8 +148,8 @@ async function handleFileChange(event) {
     workspace?.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (err) {
     console.error(err);
-    showError();
     resetToUpload(false);
+    showError();
   } finally {
     setControlsDisabled(false);
   }
