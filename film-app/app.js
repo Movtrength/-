@@ -214,7 +214,7 @@ function resetToUpload(clearInput = true) {
   }
 
   hideError();
-  updateComparePosition(50);
+  document.querySelector(".hero")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function handleReplace() {

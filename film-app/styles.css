@@ -337,6 +337,11 @@ body {
   border-radius: var(--radius-sm);
 }
 
+.app-error--hero {
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
 .btn:disabled,
 .preset-select:disabled {
   opacity: 0.5;

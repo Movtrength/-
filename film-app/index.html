@@ -32,6 +32,9 @@
           accept="image/*"
           hidden
         />
+        <p id="appError" class="app-error app-error--hero" role="alert" hidden>
+          이 이미지를 처리할 수 없습니다
+        </p>
       </div>
     </header>
 
@@ -40,10 +43,6 @@
         <label class="control-label" for="presetSelect">프리셋</label>
         <select id="presetSelect" class="preset-select"></select>
       </div>
-
-      <p id="appError" class="app-error" role="alert" hidden>
-        이 이미지를 처리할 수 없습니다
-      </p>
 
       <div id="compare" class="compare" aria-label="보정 전후 비교">
         <div class="compare__stage">
