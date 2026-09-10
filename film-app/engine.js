@@ -123,7 +123,7 @@ function applyWarmth(r, g, b, value) {
 
 function boxBlurChannel(src, dst, w, h, radius) {
   const size = radius * 2 + 1;
-  const window = new Float32Array(w);
+  const window = new Float32Array(Math.max(w, h));
 
   for (let y = 0; y < h; y++) {
     let sum = 0;
@@ -162,7 +162,7 @@ function boxBlurChannel(src, dst, w, h, radius) {
 
 function blurRgb(data, w, h, radius) {
   const len = w * h;
-  const out = new Float32Array(len * 3);
+  const out = new Float32Array(len * 4);
   const ch = [new Float32Array(len), new Float32Array(len), new Float32Array(len)];
   const blurred = [new Float32Array(len), new Float32Array(len), new Float32Array(len)];
 

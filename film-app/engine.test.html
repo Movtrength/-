@@ -13,24 +13,30 @@
   <body>
     <h1>applyPreset harness</h1>
     <p>Open console for numeric checks. Load a photo or use the synthetic gradient.</p>
-    <button id="runBtn" type="button">Run preset on synthetic image</button>
+    <button id="runBtn" type="button">Run preset on synthetic images</button>
     <div class="row">
-      <div><p>Original</p><canvas id="before"></canvas></div>
-      <div><p>Processed</p><canvas id="after"></canvas></div>
+      <div><p>Original (landscape)</p><canvas id="beforeLandscape"></canvas></div>
+      <div><p>Processed (landscape)</p><canvas id="afterLandscape"></canvas></div>
+    </div>
+    <div class="row">
+      <div><p>Original (portrait)</p><canvas id="beforePortrait"></canvas></div>
+      <div><p>Processed (portrait)</p><canvas id="afterPortrait"></canvas></div>
     </div>
     <pre id="stats"></pre>
     <script type="module">
       import { PRESETS } from "./presets.js";
       import { applyPreset } from "./engine.js";
 
-      const before = document.getElementById("before");
-      const after = document.getElementById("after");
+      const beforeLandscape = document.getElementById("beforeLandscape");
+      const afterLandscape = document.getElementById("afterLandscape");
+      const beforePortrait = document.getElementById("beforePortrait");
+      const afterPortrait = document.getElementById("afterPortrait");
       const stats = document.getElementById("stats");
 
-      function makeTestBitmap() {
+      function makeTestBitmap(width, height) {
         const c = document.createElement("canvas");
-        c.width = 320;
-        c.height = 240;
+        c.width = width;
+        c.height = height;
         const ctx = c.getContext("2d");
         const g = ctx.createLinearGradient(0, 0, c.width, c.height);
         g.addColorStop(0, "#1a1208");
@@ -57,19 +63,31 @@
         return { avgR: r / n, avgG: g / n, avgB: b / n, min, max };
       }
 
-      async function run() {
-        const source = makeTestBitmap();
-        before.width = source.width;
-        before.height = source.height;
-        before.getContext("2d").drawImage(source, 0, 0);
+      function assertFiniteRgb(data) {
+        for (let i = 0; i < data.length; i += 4) {
+          for (let c = 0; c < 3; c++) {
+            const v = data[i + c];
+            if (!Number.isFinite(v)) {
+              return { ok: false, reason: `non-finite at index ${i + c}: ${v}` };
+            }
+          }
+        }
+        return { ok: true };
+      }
+
+      async function runCase(label, width, height, beforeCanvas, afterCanvas) {
+        const source = makeTestBitmap(width, height);
+        beforeCanvas.width = source.width;
+        beforeCanvas.height = source.height;
+        beforeCanvas.getContext("2d").drawImage(source, 0, 0);
 
         const preset = PRESETS[0];
         const result = await applyPreset(source, preset);
-        after.width = result.width;
-        after.height = result.height;
-        after.getContext("2d").drawImage(result, 0, 0);
+        afterCanvas.width = result.width;
+        afterCanvas.height = result.height;
+        afterCanvas.getContext("2d").drawImage(result, 0, 0);
 
-        const beforeData = before.getContext("2d").getImageData(0, 0, before.width, before.height).data;
+        const beforeData = beforeCanvas.getContext("2d").getImageData(0, 0, beforeCanvas.width, beforeCanvas.height).data;
         const afterData = result.getContext("2d").getImageData(0, 0, result.width, result.height).data;
 
         let diff = 0;
@@ -95,8 +113,12 @@
         }
         const rbBefore = bStats.avgR / bStats.avgB;
         const rbAfter = aStats.avgR / aStats.avgB;
+        const finiteRgb = assertFiniteRgb(afterData);
 
-        const report = {
+        return {
+          label,
+          width,
+          height,
           preset: preset.id,
           pixelDiffSum: diff,
           before: bStats,
@@ -106,6 +128,21 @@
           softerContrast: aStats.max - aStats.min < bStats.max - bStats.min,
           notClippedWhite: aStats.max < 255,
           notNoOp: diff > 1000,
+          finiteRgb: finiteRgb.ok,
+          finiteRgbError: finiteRgb.ok ? null : finiteRgb.reason,
+        };
+      }
+
+      async function run() {
+        const landscape = await runCase("landscape", 320, 240, beforeLandscape, afterLandscape);
+        const portrait = await runCase("portrait", 240, 320, beforePortrait, afterPortrait);
+
+        const report = {
+          landscape,
+          portrait,
+          allPassed:
+            landscape.finiteRgb && landscape.notNoOp &&
+            portrait.finiteRgb && portrait.notNoOp,
         };
         stats.textContent = JSON.stringify(report, null, 2);
         console.log("engine harness", report);
