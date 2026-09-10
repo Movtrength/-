@@ -18,6 +18,7 @@ let originalBitmap = null;
 let processedCanvas = null;
 let activePresetId = PRESETS[0]?.id ?? "";
 let originalObjectUrl = null;
+let processGeneration = 0;
 
 function populatePresetSelect() {
   if (!presetSelect) return;
@@ -80,6 +81,17 @@ function updateStageAspectRatio(width, height) {
   compareStage.style.aspectRatio = `${width} / ${height}`;
 }
 
+function clearCompareLayers() {
+  if (compareAfter) {
+    compareAfter.replaceChildren();
+    compareAfter.style.clipPath = "";
+  }
+
+  if (compareStage) {
+    compareStage.style.aspectRatio = "";
+  }
+}
+
 function mountProcessedCanvas(canvas) {
   if (!compareAfter) return;
 
@@ -93,21 +105,33 @@ function mountProcessedCanvas(canvas) {
 }
 
 async function processImage() {
-  if (!originalBitmap) return;
+  if (!originalBitmap) return false;
+
+  const generation = ++processGeneration;
 
   setControlsDisabled(true);
   hideError();
 
   try {
     const preset = getPresetById(activePresetId);
-    processedCanvas = await applyPreset(originalBitmap, preset);
+    const canvas = await applyPreset(originalBitmap, preset);
+
+    if (generation !== processGeneration) return false;
+
+    processedCanvas = canvas;
     mountProcessedCanvas(processedCanvas);
     updateStageAspectRatio(processedCanvas.width, processedCanvas.height);
+    return true;
   } catch (err) {
+    if (generation !== processGeneration) return false;
+
     console.error(err);
     showError();
+    return false;
   } finally {
-    setControlsDisabled(false);
+    if (generation === processGeneration) {
+      setControlsDisabled(false);
+    }
   }
 }
 
@@ -115,6 +139,7 @@ async function handleFileChange(event) {
   const file = event.target.files?.[0];
   if (!file) return;
 
+  processGeneration++;
   revokeObjectUrls();
 
   if (originalBitmap?.close) {
@@ -123,6 +148,7 @@ async function handleFileChange(event) {
 
   originalBitmap = null;
   processedCanvas = null;
+  clearCompareLayers();
 
   setControlsDisabled(true);
   hideError();
@@ -137,7 +163,12 @@ async function handleFileChange(event) {
     originalBitmap = await createImageBitmap(file);
     activePresetId = presetSelect?.value || PRESETS[0].id;
 
-    await processImage();
+    const processed = await processImage();
+    if (!processed) {
+      resetToUpload(false);
+      showError();
+      return;
+    }
 
     if (workspace) {
       workspace.hidden = false;
@@ -156,6 +187,7 @@ async function handleFileChange(event) {
 }
 
 function resetToUpload(clearInput = true) {
+  processGeneration++;
   revokeObjectUrls();
 
   if (originalBitmap?.close) {
@@ -169,14 +201,7 @@ function resetToUpload(clearInput = true) {
     compareBefore.removeAttribute("src");
   }
 
-  if (compareAfter) {
-    compareAfter.replaceChildren();
-    compareAfter.style.clipPath = "";
-  }
-
-  if (compareStage) {
-    compareStage.style.aspectRatio = "";
-  }
+  clearCompareLayers();
 
   if (workspace) {
     workspace.hidden = true;
