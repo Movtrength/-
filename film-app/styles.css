@@ -234,15 +234,46 @@ body {
 }
 
 .compare__layer--before {
-  background: linear-gradient(145deg, #2a2622 0%, #1e1c1a 100%);
-  clip-path: inset(0 50% 0 0);
+  z-index: 1;
+  background: var(--color-bg-elevated);
 }
 
 .compare__layer--after {
-  background: linear-gradient(145deg, #3a3228 0%, #2a241e 100%);
+  z-index: 2;
+  clip-path: inset(0 50% 0 0);
+  background: transparent;
+  pointer-events: none;
+}
+
+.compare__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.compare__slider {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  z-index: 4;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.compare__slider:disabled {
+  cursor: not-allowed;
 }
 
 .compare__badge {
+  position: relative;
+  z-index: 1;
   font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.06em;
@@ -251,6 +282,12 @@ body {
   background: rgba(0, 0, 0, 0.45);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.compare__badge--after {
+  align-self: flex-end;
+  margin-left: auto;
 }
 
 .compare__handle {
@@ -261,8 +298,8 @@ body {
   width: 3px;
   transform: translateX(-50%);
   background: var(--color-accent);
-  cursor: ew-resize;
-  z-index: 2;
+  pointer-events: none;
+  z-index: 3;
   transition: box-shadow var(--motion-fast);
 }
 
@@ -287,6 +324,24 @@ body {
 
 .compare__handle:hover .compare__handle-grip {
   transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ── Error message ─────────────────────────────────────────────── */
+.app-error {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: #f0c4c4;
+  background: rgba(180, 60, 60, 0.15);
+  border: 1px solid rgba(220, 100, 100, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+.btn:disabled,
+.preset-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ── Action buttons ────────────────────────────────────────────── */
@@ -344,6 +399,11 @@ body {
 }
 
 /* ── Responsive ────────────────────────────────────────────────── */
+body.has-workspace .hero {
+  min-height: auto;
+  padding-bottom: 2rem;
+}
+
 @media (min-width: 640px) {
   .hero {
     padding: 3rem 2rem 5rem;

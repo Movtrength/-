@@ -41,14 +41,28 @@
         <select id="presetSelect" class="preset-select"></select>
       </div>
 
+      <p id="appError" class="app-error" role="alert" hidden>
+        이 이미지를 처리할 수 없습니다
+      </p>
+
       <div id="compare" class="compare" aria-label="보정 전후 비교">
         <div class="compare__stage">
           <div class="compare__layer compare__layer--before">
-            <span class="compare__badge">원본</span>
+            <img id="compareBefore" class="compare__image" alt="" />
+            <span class="compare__badge compare__badge--before">원본</span>
           </div>
-          <div class="compare__layer compare__layer--after">
-            <span class="compare__badge">보정</span>
+          <div id="compareAfter" class="compare__layer compare__layer--after">
+            <span class="compare__badge compare__badge--after">보정</span>
           </div>
+          <input
+            id="compareSlider"
+            class="compare__slider"
+            type="range"
+            min="0"
+            max="100"
+            value="50"
+            aria-label="보정 전후 비교 슬라이더"
+          />
           <div class="compare__handle" aria-hidden="true">
             <span class="compare__handle-grip"></span>
           </div>
