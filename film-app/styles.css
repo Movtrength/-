@@ -37,13 +37,18 @@ html {
 }
 
 body {
-  min-height: 100dvh;
   font-family: var(--font-body);
   font-weight: 400;
   color: var(--color-text);
   background: var(--color-bg);
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 
 /* ── Film grain overlay ────────────────────────────────────────── */
@@ -84,10 +89,10 @@ body {
 /* ── Hero ──────────────────────────────────────────────────────── */
 .hero {
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  min-height: 100dvh;
-  padding: 2.5rem 1.5rem 4rem;
+  padding: 2.5rem 1.5rem 2rem;
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212, 160, 84, 0.07) 0%, transparent 70%),
     radial-gradient(ellipse 50% 40% at 80% 90%, rgba(80, 60, 40, 0.15) 0%, transparent 60%),
@@ -165,6 +170,18 @@ body {
 .upload-cta__hint {
   font-size: 0.75rem;
   opacity: 0.65;
+}
+
+.hero__privacy {
+  margin-top: 1.75rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+body.has-workspace .hero__privacy {
+  display: none;
 }
 
 /* ── Workspace ─────────────────────────────────────────────────── */
@@ -393,8 +410,14 @@ body {
 
 /* ── Footer ────────────────────────────────────────────────────── */
 .footer {
-  padding: 1.5rem;
+  display: none;
+  flex-shrink: 0;
+  padding: 1.25rem 1.5rem 1.5rem;
   text-align: center;
+}
+
+body.has-workspace .footer {
+  display: block;
 }
 
 .footer p {
@@ -405,7 +428,7 @@ body {
 
 /* ── Responsive ────────────────────────────────────────────────── */
 body.has-workspace .hero {
-  min-height: auto;
+  flex: none;
   padding-bottom: 2rem;
 }
 
