@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Engine manual harness</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; background: #111; color: #eee; }
+      .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+      canvas { max-width: 45vw; border: 1px solid #444; }
+      pre { background: #222; padding: 12px; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>applyPreset harness</h1>
+    <p>Open console for numeric checks. Load a photo or use the synthetic gradient.</p>
+    <button id="runBtn" type="button">Run preset on synthetic images</button>
+    <div class="row">
+      <div><p>Original (landscape)</p><canvas id="beforeLandscape"></canvas></div>
+      <div><p>Processed (landscape)</p><canvas id="afterLandscape"></canvas></div>
+    </div>
+    <div class="row">
+      <div><p>Original (portrait)</p><canvas id="beforePortrait"></canvas></div>
+      <div><p>Processed (portrait)</p><canvas id="afterPortrait"></canvas></div>
+    </div>
+    <pre id="stats"></pre>
+    <script type="module">
+      import { PRESETS } from "./presets.js";
+      import { applyPreset } from "./engine.js";
+
+      const beforeLandscape = document.getElementById("beforeLandscape");
+      const afterLandscape = document.getElementById("afterLandscape");
+      const beforePortrait = document.getElementById("beforePortrait");
+      const afterPortrait = document.getElementById("afterPortrait");
+      const stats = document.getElementById("stats");
+
+      function makeTestBitmap(width, height) {
+        const c = document.createElement("canvas");
+        c.width = width;
+        c.height = height;
+        const ctx = c.getContext("2d");
+        const g = ctx.createLinearGradient(0, 0, c.width, c.height);
+        g.addColorStop(0, "#1a1208");
+        g.addColorStop(0.35, "#6b8cae");
+        g.addColorStop(0.7, "#e8dcc8");
+        g.addColorStop(1, "#f5f0e6");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, c.width, c.height);
+        ctx.fillStyle = "rgba(40,30,20,0.35)";
+        ctx.fillRect(40, 50, 90, 120);
+        return c;
+      }
+
+      function channelStats(data) {
+        let r = 0, g = 0, b = 0, min = 255, max = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          r += data[i]; g += data[i + 1]; b += data[i + 2];
+          const l = Math.max(data[i], data[i + 1], data[i + 2]);
+          const m = Math.min(data[i], data[i + 1], data[i + 2]);
+          if (l > max) max = l;
+          if (m < min) min = m;
+        }
+        const n = data.length / 4;
+        return { avgR: r / n, avgG: g / n, avgB: b / n, min, max };
+      }
+
+      function assertFiniteRgb(data) {
+        for (let i = 0; i < data.length; i += 4) {
+          for (let c = 0; c < 3; c++) {
+            const v = data[i + c];
+            if (!Number.isFinite(v)) {
+              return { ok: false, reason: `non-finite at index ${i + c}: ${v}` };
+            }
+          }
+        }
+        return { ok: true };
+      }
+
+      async function runCase(label, width, height, beforeCanvas, afterCanvas) {
+        const source = makeTestBitmap(width, height);
+        beforeCanvas.width = source.width;
+        beforeCanvas.height = source.height;
+        beforeCanvas.getContext("2d").drawImage(source, 0, 0);
+
+        const preset = PRESETS[0];
+        const result = await applyPreset(source, preset);
+        afterCanvas.width = result.width;
+        afterCanvas.height = result.height;
+        afterCanvas.getContext("2d").drawImage(result, 0, 0);
+
+        const beforeData = beforeCanvas.getContext("2d").getImageData(0, 0, beforeCanvas.width, beforeCanvas.height).data;
+        const afterData = result.getContext("2d").getImageData(0, 0, result.width, result.height).data;
+
+        let diff = 0;
+        for (let i = 0; i < beforeData.length; i += 4) {
+          diff += Math.abs(beforeData[i] - afterData[i]);
+          diff += Math.abs(beforeData[i + 1] - afterData[i + 1]);
+          diff += Math.abs(beforeData[i + 2] - afterData[i + 2]);
+        }
+
+        const bStats = channelStats(beforeData);
+        const aStats = channelStats(afterData);
+        let darkBefore = 0;
+        let darkAfter = 0;
+        let darkCount = 0;
+        for (let i = 0; i < beforeData.length; i += 4) {
+          const l = 0.2126 * beforeData[i] + 0.7152 * beforeData[i + 1] + 0.0722 * beforeData[i + 2];
+          if (l < 40) {
+            darkCount++;
+            darkBefore += l;
+            darkAfter +=
+              0.2126 * afterData[i] + 0.7152 * afterData[i + 1] + 0.0722 * afterData[i + 2];
+          }
+        }
+        const rbBefore = bStats.avgR / bStats.avgB;
+        const rbAfter = aStats.avgR / aStats.avgB;
+        const finiteRgb = assertFiniteRgb(afterData);
+
+        return {
+          label,
+          width,
+          height,
+          preset: preset.id,
+          pixelDiffSum: diff,
+          before: bStats,
+          after: aStats,
+          warmer: rbAfter > rbBefore,
+          liftedBlacks: darkCount > 0 && darkAfter / darkCount > darkBefore / darkCount,
+          softerContrast: aStats.max - aStats.min < bStats.max - bStats.min,
+          notClippedWhite: aStats.max < 255,
+          notNoOp: diff > 1000,
+          finiteRgb: finiteRgb.ok,
+          finiteRgbError: finiteRgb.ok ? null : finiteRgb.reason,
+        };
+      }
+
+      async function run() {
+        const landscape = await runCase("landscape", 320, 240, beforeLandscape, afterLandscape);
+        const portrait = await runCase("portrait", 240, 320, beforePortrait, afterPortrait);
+
+        const report = {
+          landscape,
+          portrait,
+          allPassed:
+            landscape.finiteRgb && landscape.notNoOp &&
+            portrait.finiteRgb && portrait.notNoOp,
+        };
+        stats.textContent = JSON.stringify(report, null, 2);
+        console.log("engine harness", report);
+        window.__engineReport = report;
+      }
+
+      document.getElementById("runBtn").addEventListener("click", run);
+      run();
+    </script>
+  </body>
+</html>
