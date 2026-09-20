@@ -1,0 +1,50 @@
+[
+  {
+    "articleId": "101",
+    "title": "스쿼트 무릎 통증 어떻게 줄이나요?",
+    "author": "코치A",
+    "date": "2026.09.18",
+    "board": "질문",
+    "viewCount": "120",
+    "likeCount": "4",
+    "body": "스쿼트 할 때 무릎이 앞으로 나가면서 통증이 있습니다. 발 위치랑 깊이 조절 방법이 궁금합니다. 오늘은 무게를 낮췄습니다.",
+    "url": "https://m.cafe.naver.com/movtrength/101",
+    "requiresLogin": false,
+    "images": [],
+    "comments": [
+      {
+        "author": "회원1",
+        "date": "2026.09.18",
+        "body": "무릎이 발끝을 많이 넘지 않게 해보세요."
+      }
+    ]
+  },
+  {
+    "articleId": "102",
+    "title": "스쿼트 깊이보다 발 위치가 먼저",
+    "author": "코치B",
+    "date": "2026.09.17",
+    "board": "정보",
+    "viewCount": "88",
+    "likeCount": "7",
+    "body": "무릎 통증이 있으면 깊이보다 발 위치를 먼저 봅니다. 스쿼트는 발 너비와 바깥 각도가 무릎 방향을 만듭니다.",
+    "url": "https://m.cafe.naver.com/movtrength/102",
+    "requiresLogin": false,
+    "images": [],
+    "comments": []
+  },
+  {
+    "articleId": "103",
+    "title": "멤버 전용 공지",
+    "author": "운영자",
+    "date": "2026.09.16",
+    "board": "공지",
+    "viewCount": "0",
+    "likeCount": "0",
+    "body": "",
+    "url": "https://m.cafe.naver.com/movtrength/103",
+    "requiresLogin": true,
+    "images": [],
+    "comments": []
+  }
+]
