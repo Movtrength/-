@@ -1,0 +1,24 @@
+{
+  "name": "naver-cafe-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Naver Cafe post parser and analyzer that uses Stagehand as a library. This is not a Stagehand fork.",
+  "scripts": {
+    "cli": "tsx src/cli.ts",
+    "demo": "tsx src/cli.ts demo",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@browserbasehq/stagehand": "^4.1.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0"
+  }
+}
