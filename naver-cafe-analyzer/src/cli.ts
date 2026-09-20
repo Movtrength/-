@@ -21,6 +21,16 @@ async function main() {
     return;
   }
 
+  if (resolved === "from-md") {
+    const input = rest[0];
+    if (!input) throw new Error("from-md에는 목록 마크다운 경로가 필요합니다.");
+    const { parseMobileListingMarkdown, summariesToPosts } = await import("./parse-listing-markdown.ts");
+    const markdown = await readFile(input, "utf8");
+    const posts = summariesToPosts(parseMobileListingMarkdown(markdown));
+    await writeOutputs(posts, flagValue(rest, "--out") ?? "out/listing");
+    return;
+  }
+
   if (resolved === "analyze") {
     const input = rest[0];
     if (!input) throw new Error("analyze에는 posts.json 경로가 필요합니다.");
@@ -106,6 +116,7 @@ function printHelp() {
 
 명령:
   demo                         샘플 글만 분석 (브라우저 없음)
+  from-md <list.md>            공개 목록 마크다운만 분석
   parse <cafe-url>             글 목록/본문 추출
   analyze <posts.json>         이미 뽑은 글 분석
   run <cafe-url>               추출 + 분석

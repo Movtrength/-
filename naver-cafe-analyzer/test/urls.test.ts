@@ -17,6 +17,11 @@ describe("toMobileCafeUrl", () => {
   it("카페가 아니면 거절한다", () => {
     assert.throws(() => toMobileCafeUrl("https://blog.naver.com/foo"), /네이버 카페 URL이 아닙니다/);
   });
+
+  it("끝에 ?만 있어도 카페 홈으로 읽는다", () => {
+    const url = toMobileCafeUrl("https://m.cafe.naver.com/tlswkd.cafe?");
+    assert.equal(url.href, "https://m.cafe.naver.com/tlswkd.cafe");
+  });
 });
 
 describe("parseCafeTarget", () => {

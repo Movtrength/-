@@ -5,7 +5,7 @@ const CAFE_HOSTS = new Set(["cafe.naver.com", "www.cafe.naver.com", "m.cafe.nave
 export function assertCafeUrl(input: string): URL {
   let url: URL;
   try {
-    url = new URL(input);
+    url = new URL(input.replace(/\?+$/, ""));
   } catch {
     throw new Error(`유효한 URL이 아닙니다: ${input}`);
   }

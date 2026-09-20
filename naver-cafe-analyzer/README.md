@@ -32,11 +32,21 @@ Stagehand는 환경변수를 직접 읽지 않으므로, CLI가 키를 넘겨 �
 npm run demo
 ```
 
+이 도구의 첫 대상 카페는 **신장병 환우 모임**입니다.
+
+- 모바일: `https://m.cafe.naver.com/tlswkd.cafe`
+- 같은 카페: `https://cafe.naver.com/tlswkd` · clubid `10097006`
+- 홈 목록 제목은 로그인 없이 보입니다.
+- 본문·댓글은 네이버 로그인(멤버)이 필요합니다. 우회하지 않습니다.
+
 실제 카페(본인이 볼 수 있는 공개 글):
 
 ```bash
+# 공개 목록 마크다운만 분석
+npx tsx src/cli.ts from-md .firecrawl/tlswkd-mobile.md --out out/tlswkd
+
 # 추출만
-npx tsx src/cli.ts parse "https://cafe.naver.com/{카페주소}" --limit 5 --out out/latest
+npx tsx src/cli.ts parse "https://m.cafe.naver.com/tlswkd.cafe" --limit 5 --out out/latest
 
 # 추출 + 분석
 npx tsx src/cli.ts run "https://cafe.naver.com/{카페주소}/{글번호}" --out out/latest

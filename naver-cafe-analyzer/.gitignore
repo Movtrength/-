@@ -3,4 +3,5 @@ dist/
 out/
 .env
 browser-data/
+.firecrawl/
 *.log
