@@ -1,0 +1,13 @@
+---
+description: Separate Jev calls, reflection calls, credentials, and held-out evidence. Apply while configuring providers or running a JevHarness experiment.
+alwaysApply: false
+---
+
+# Jev provider boundary
+
+- Jev inference and reflection are different providers and different credential variables.
+- Vercel gateway traffic uses `transport="vercel"` with `AI_GATEWAY_API_KEY`. Direct TypeSafe traffic uses `transport="typesafe"` with `TYPESAFE_API_KEY`. Do not send either key to the other endpoint or to a reflector.
+- Do not print credential values or store them in observations, prompts, examples, or run artifacts.
+- A provider or environment failure stays an infrastructure failure. Preserve the partial trace. Do not fabricate a Jev answer or relabel the outage as a losing policy.
+- Held-out labels and scores stay out of prompts, generated code, candidate selection, and stopping decisions.
+- An unspecified money, round, or call limit is unknown. Wait for an explicit budget, or for an explicit authorization of unrestricted calls inside the agreed experiment, before paid inference.

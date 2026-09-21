@@ -1,0 +1,18 @@
+{
+  "name": "jev-harness",
+  "displayName": "JevHarness",
+  "version": "0.1.0",
+  "description": "Cursor packaging of JevHarness: clarify a task contract, author a code-and-Jev pipeline, and optionally evolve it from complete trajectories and rewards.",
+  "author": {
+    "name": "TianyuCodings"
+  },
+  "homepage": "https://github.com/TianyuCodings/JevHarness",
+  "repository": "https://github.com/TianyuCodings/JevHarness",
+  "keywords": ["jev", "harness", "reflection", "gepa", "cursor"],
+  "category": "developer-tools",
+  "tags": ["jev", "harness", "reflection"],
+  "skills": "./skills/",
+  "rules": "./rules/",
+  "agents": "./agents/",
+  "commands": "./commands/"
+}
