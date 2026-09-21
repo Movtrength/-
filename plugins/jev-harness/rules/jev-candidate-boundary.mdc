@@ -1,0 +1,13 @@
+---
+description: Keep JevHarness candidates inside the task contract. Apply while authoring a PipelineSpec, adapter, evaluator, or evolution run.
+alwaysApply: false
+---
+
+# Jev candidate boundary
+
+- Trusted adapter code owns observations, legal actions, side effects, labels, hidden state, and the reward.
+- Candidate code may build features, Jev questions, thresholds, actions, and memory inside that fixed contract.
+- A new task is an importable evaluator callback plus a small runner. Do not invent a universal task CLI or a `TaskAdapter` base class.
+- Domain examples stay examples. A new task uses its own objective, data split, fees, and model choices.
+- Python nodes run only in the checkout's supported sandbox. If isolation is unavailable, stop. Do not substitute host `exec`.
+- Enforce "Jev must remain in production" in the candidate constraint and the frozen artifact when the user requires it.
