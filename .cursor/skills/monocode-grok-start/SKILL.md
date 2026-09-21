@@ -1,26 +1,29 @@
 ---
 name: monocode-grok-start
-description: Fix MonoCode "Grok Build did not start. Invalid params" and "No repo". Use when Grok Build fails to start, session/new returns -32602, cwd is "~", or the user mentions MonoCode plus Grok.
+description: Fix MonoCode Grok Build Invalid params, No repo, and updater Read-only file system os error 30. Use when MonoCode cannot start Grok or cannot install an update.
 ---
 
-# MonoCode Grok Build start failure
+# MonoCode start and update failures
 
-The UI line `Grok Build did not start. Invalid params` is MonoCode wrapping Grok ACP JSON-RPC `-32602`.
+## Grok Build did not start. Invalid params
 
-## What to do first
+1. Open a real project folder. Do not send from `~`.
+2. Pick **Grok 4.6**, not the product slug **Grok Build**.
+3. Confirm `grok login`.
 
-1. Open a real project folder in MonoCode. Do not send from `~`.
-2. Pick **Grok 4.6** (`grok-4.6`), not the product slug **Grok Build** (`grok-build`).
-3. Confirm `grok login` (or `XAI_API_KEY`).
+`No repo` means cwd is still `~` or the folder is not git. Grok `session/new` requires an absolute cwd.
 
-`No repo` in the composer means the folder is not a git checkout **or** cwd is still the empty-project sentinel `~`. Home is not a project.
+## Couldn't install the update. Read-only file system (os error 30)
 
-## Why it fails
+The app is running from a DMG or App Translocation. The updater cannot replace that copy.
 
-- Grok `session/new` requires an **absolute** `cwd`. MonoCode's empty project is `"~"`.
-- `grok-build` is the CLI product name. Live ACP ids are `grok-4.6` / `grok-4.5`.
+1. Quit MonoCode
+2. Drag MonoCode.app into Applications
+3. Eject the disk image
+4. Open it from Applications
+5. If it still fails: `xattr -cr /Applications/MonoCode.app`
 
 ## Code
 
-Resolution helpers and the upstream patch live in `monocode-grok-fix/`.
-Do not invent a second mapping. Reuse `resolveGrokWorkspaceCwd` and `resolveGrokAcpModelId`.
+Helpers and upstream patches live in `monocode-grok-fix/`.
+Reuse `resolveGrokWorkspaceCwd`, `resolveGrokAcpModelId`, and `explainUpdateInstallError`.

@@ -1,0 +1,239 @@
+diff --git a/src/app/model/updater.test.ts b/src/app/model/updater.test.ts
+index c7523e7..e64f08a 100644
+--- a/src/app/model/updater.test.ts
++++ b/src/app/model/updater.test.ts
+@@ -8,9 +8,11 @@ const mocks = vi.hoisted(() => ({
+   message: vi.fn(),
+   relaunch: vi.fn(),
+   remember: vi.fn(),
++  resourceDir: vi.fn(),
+ }));
+ 
+ vi.mock("@tauri-apps/api/app", () => ({ getVersion: mocks.getVersion }));
++vi.mock("@tauri-apps/api/path", () => ({ resourceDir: mocks.resourceDir }));
+ vi.mock("@tauri-apps/plugin-dialog", () => ({
+   ask: vi.fn(),
+   message: mocks.message,
+@@ -26,6 +28,7 @@ beforeEach(() => {
+   mocks.getVersion.mockResolvedValue("0.1.22");
+   mocks.relaunch.mockResolvedValue(undefined);
+   mocks.message.mockResolvedValue(undefined);
++  mocks.resourceDir.mockResolvedValue("/Applications/MonoCode.app/Contents/Resources");
+ });
+ 
+ async function updaterWithPendingUpdate() {
+@@ -64,6 +67,35 @@ describe("installPendingUpdate", () => {
+     expect(mocks.relaunch).not.toHaveBeenCalled();
+   });
+ 
++  it("refuses to install from a disk image before downloading", async () => {
++    mocks.resourceDir.mockResolvedValue("/Volumes/MonoCode/MonoCode.app/Contents/Resources");
++    const updater = await updaterWithPendingUpdate();
++
++    const result = await updater.installPendingUpdate();
++
++    expect(result.phase).toBe("error");
++    expect(result.error).toMatch(/Applications folder/);
++    expect(mocks.downloadAndInstall).not.toHaveBeenCalled();
++    expect(mocks.message).toHaveBeenCalledWith(
++      expect.stringContaining("Applications folder"),
++      { title: "MonoCode" },
++    );
++  });
++
++  it("rewrites os error 30 when the install location was not detected first", async () => {
++    mocks.resourceDir.mockRejectedValue(new Error("no path"));
++    mocks.downloadAndInstall.mockRejectedValue(
++      new Error("Read-only file system (os error 30)"),
++    );
++    const updater = await updaterWithPendingUpdate();
++
++    const result = await updater.installPendingUpdate();
++
++    expect(result.phase).toBe("error");
++    expect(result.error).toMatch(/Applications folder/);
++    expect(mocks.remember).not.toHaveBeenCalled();
++  });
++
+   it("does not record when no update is pending", async () => {
+     const updater = await import("./updater");
+ 
+diff --git a/src/app/model/updater.ts b/src/app/model/updater.ts
+index bfcc934..2630bdd 100644
+--- a/src/app/model/updater.ts
++++ b/src/app/model/updater.ts
+@@ -1,9 +1,15 @@
+ import { getVersion } from "@tauri-apps/api/app";
++import { resourceDir } from "@tauri-apps/api/path";
+ import { ask, message } from "@tauri-apps/plugin-dialog";
+ import { relaunch } from "@tauri-apps/plugin-process";
+ import { check, type DownloadEvent, type Update } from "@tauri-apps/plugin-updater";
+ import { announceUpdateAvailable } from "../../features/settings/model/sounds";
+ import { rememberInstalledUpdate } from "./updateNotice";
++import {
++  READONLY_INSTALL_HELP,
++  explainUpdateInstallError,
++  isReadOnlyInstallLocation,
++} from "./updaterInstall";
+ 
+ export type UpdaterPhase =
+   | "idle"
+@@ -120,6 +126,21 @@ export async function installPendingUpdate(
+     return idle;
+   }
+ 
++  const installPath = await readInstallPath();
++  if (installPath && isReadOnlyInstallLocation(installPath)) {
++    const failed: UpdaterSnapshot = {
++      phase: "error",
++      currentVersion,
++      availableVersion: update.version,
++      error: READONLY_INSTALL_HELP,
++    };
++    onProgress?.(failed);
++    await message(`Couldn't install the update.\n\n${READONLY_INSTALL_HELP}`, {
++      title: "MonoCode",
++    });
++    return failed;
++  }
++
+   let downloaded = 0;
+   let contentLength = 0;
+ 
+@@ -161,7 +182,7 @@ export async function installPendingUpdate(
+       currentVersion: update.version,
+     };
+   } catch (err) {
+-    const error = err instanceof Error ? err.message : String(err);
++    const error = explainUpdateInstallError(err, installPath);
+     const failed: UpdaterSnapshot = {
+       phase: "error",
+       currentVersion,
+@@ -173,3 +194,12 @@ export async function installPendingUpdate(
+     return failed;
+   }
+ }
++
++async function readInstallPath(): Promise<string | undefined> {
++  try {
++    const path = await resourceDir();
++    return path.trim() || undefined;
++  } catch {
++    return undefined;
++  }
++}
+diff --git a/src/app/model/updaterConfig.test.ts b/src/app/model/updaterConfig.test.ts
+index a5c358d..2bfe918 100644
+--- a/src/app/model/updaterConfig.test.ts
++++ b/src/app/model/updaterConfig.test.ts
+@@ -9,6 +9,9 @@ const { getVersion, check, message, ask, relaunch } = vi.hoisted(() => ({
+ }));
+ 
+ vi.mock("@tauri-apps/api/app", () => ({ getVersion }));
++vi.mock("@tauri-apps/api/path", () => ({
++  resourceDir: async () => "/Applications/MonoCode.app/Contents/Resources",
++}));
+ vi.mock("@tauri-apps/plugin-updater", () => ({ check }));
+ vi.mock("@tauri-apps/plugin-dialog", () => ({ ask, message }));
+ vi.mock("@tauri-apps/plugin-process", () => ({ relaunch }));
+diff --git a/src/app/model/updaterInstall.test.ts b/src/app/model/updaterInstall.test.ts
+new file mode 100644
+index 0000000..ab4f2f4
+--- /dev/null
++++ b/src/app/model/updaterInstall.test.ts
+@@ -0,0 +1,45 @@
++import { describe, expect, it } from "vitest";
++import {
++  READONLY_INSTALL_HELP,
++  explainUpdateInstallError,
++  installLocationKind,
++  isReadOnlyInstallError,
++  isReadOnlyInstallLocation,
++} from "./updaterInstall";
++
++describe("updater install location", () => {
++  it("treats disk images and App Translocation as read-only", () => {
++    expect(installLocationKind("/Volumes/MonoCode/MonoCode.app")).toBe(
++      "volumes",
++    );
++    expect(
++      installLocationKind(
++        "/private/var/folders/xx/AppTranslocation/A/d/MonoCode.app",
++      ),
++    ).toBe("translocated");
++    expect(
++      isReadOnlyInstallLocation("/Volumes/MonoCode/MonoCode.app/Contents"),
++    ).toBe(true);
++    expect(
++      isReadOnlyInstallLocation(
++        "/private/var/folders/xx/AppTranslocation/A/d/MonoCode.app",
++      ),
++    ).toBe(true);
++    expect(
++      isReadOnlyInstallLocation("/Applications/MonoCode.app/Contents/Resources"),
++    ).toBe(false);
++  });
++
++  it("rewrites os error 30 into a move-to-Applications message", () => {
++    expect(isReadOnlyInstallError(new Error("Read-only file system (os error 30)"))).toBe(
++      true,
++    );
++    expect(
++      explainUpdateInstallError("Read-only file system (os error 30)"),
++    ).toBe(READONLY_INSTALL_HELP);
++    expect(
++      explainUpdateInstallError("install failed", "/Volumes/MonoCode/MonoCode.app"),
++    ).toBe(READONLY_INSTALL_HELP);
++    expect(explainUpdateInstallError("network failed")).toBe("network failed");
++  });
++});
+diff --git a/src/app/model/updaterInstall.ts b/src/app/model/updaterInstall.ts
+new file mode 100644
+index 0000000..a6f3b8c
+--- /dev/null
++++ b/src/app/model/updaterInstall.ts
+@@ -0,0 +1,44 @@
++export const READONLY_INSTALL_HELP =
++  "MonoCode is running from a read-only copy (a disk image, Downloads quarantine, or App Translocation). The updater cannot replace that file.\n\n1. Quit MonoCode\n2. Drag MonoCode.app into the Applications folder\n3. Eject the disk image if it is still mounted\n4. Open MonoCode from Applications, then update again.";
++
++export type InstallLocationKind =
++  | "volumes"
++  | "translocated"
++  | "downloads"
++  | "applications"
++  | "other";
++
++/** Classify the running bundle so the updater can refuse a known-unwritable copy. */
++export function installLocationKind(path: string): InstallLocationKind {
++  const normalized = path.replace(/\\/g, "/").toLowerCase();
++  if (normalized.includes("/apptranslocation/")) return "translocated";
++  if (/(^|\/)volumes\//.test(normalized)) return "volumes";
++  if (normalized.includes("/downloads/")) return "downloads";
++  if (normalized.includes("/applications/")) return "applications";
++  return "other";
++}
++
++export function isReadOnlyInstallLocation(path: string): boolean {
++  const kind = installLocationKind(path);
++  return kind === "volumes" || kind === "translocated";
++}
++
++export function isReadOnlyInstallError(error: unknown): boolean {
++  const text = error instanceof Error ? error.message : String(error ?? "");
++  return /read-only file system|os error 30|erofs|readonly filesystem/i.test(
++    text,
++  );
++}
++
++export function explainUpdateInstallError(
++  error: unknown,
++  installPath?: string,
++): string {
++  if (
++    (installPath && isReadOnlyInstallLocation(installPath)) ||
++    isReadOnlyInstallError(error)
++  ) {
++    return READONLY_INSTALL_HELP;
++  }
++  return error instanceof Error ? error.message : String(error);
++}
