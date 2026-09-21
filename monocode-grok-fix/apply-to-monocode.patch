@@ -1,0 +1,456 @@
+diff --git a/src/integrations/harness/core/jsonRpc.test.ts b/src/integrations/harness/core/jsonRpc.test.ts
+index 147712c..7ab0b94 100644
+--- a/src/integrations/harness/core/jsonRpc.test.ts
++++ b/src/integrations/harness/core/jsonRpc.test.ts
+@@ -9,9 +9,19 @@ vi.mock("./child", () => ({
+     transport.onWrite(sessionId, line),
+ }));
+ 
+-import { JsonRpcClient } from "./jsonRpc";
++import { formatRpcError, JsonRpcClient } from "./jsonRpc";
+ 
+ describe("JsonRpcClient", () => {
++  it("includes ACP error data so Invalid params is not a bare string", () => {
++    expect(
++      formatRpcError({
++        code: -32602,
++        message: "Invalid params",
++        data: "cwd must be an absolute path",
++      }),
++    ).toBe("Invalid params: cwd must be an absolute path");
++  });
++
+   beforeEach(() => {
+     transport.onWrite = async () => {};
+   });
+diff --git a/src/integrations/harness/core/jsonRpc.ts b/src/integrations/harness/core/jsonRpc.ts
+index 4fc4c5e..42a98f8 100644
+--- a/src/integrations/harness/core/jsonRpc.ts
++++ b/src/integrations/harness/core/jsonRpc.ts
+@@ -39,6 +39,18 @@ export type JsonRpcClientOptions = {
+  * Bidirectional JSON-RPC / JSONL client over a harness child process stdin/stdout.
+  * Supports numeric and string request ids; Codex app-server uses headerless frames.
+  */
++export function formatRpcError(
++  error: { code?: number; message?: string; data?: unknown },
++  label = "rpc",
++): string {
++  const message = error.message || `${label} error ${error.code ?? ""}`;
++  if (error.data == null || error.data === "") return message;
++  const data =
++    typeof error.data === "string" ? error.data : JSON.stringify(error.data);
++  if (!data || message.includes(data)) return message;
++  return `${message}: ${data}`;
++}
++
+ export class JsonRpcClient {
+   private nextId = 1;
+   private readonly pending = new Map<string, Pending>();
+@@ -198,11 +210,7 @@ export class JsonRpcClient {
+       if (!pending) return;
+       this.pending.delete(key);
+       if (msg.error) {
+-        pending.reject(
+-          new Error(
+-            msg.error.message || `${this.label} error ${msg.error.code ?? ""}`,
+-          ),
+-        );
++        pending.reject(new Error(formatRpcError(msg.error, this.label)));
+         return;
+       }
+       pending.resolve(msg.result);
+diff --git a/src/integrations/harness/providers/grok/grok.ts b/src/integrations/harness/providers/grok/grok.ts
+index 27e9155..77c98a3 100644
+--- a/src/integrations/harness/providers/grok/grok.ts
++++ b/src/integrations/harness/providers/grok/grok.ts
+@@ -1,4 +1,5 @@
+ import { nativeModelId } from "../../../../features/sessions/model/models";
++import { homeDir } from "../../../../platform/tauri/fs";
+ import { AcpSubagents } from "../../core/acpSubagents";
+ import type { RuntimeMode } from "../../../../features/sessions/model/session";
+ import { AcpClient, type AcpHandlers } from "../../core/acp";
+@@ -14,6 +15,7 @@ import {
+   askQuestionResponse,
+   askQuestionsFromAcp,
+   asRecord,
++  assertGrokWorkspaceCwd,
+   contextWindowFromSetup,
+   currentModelId,
+   eventsFromAcpUpdate,
+@@ -21,13 +23,18 @@ import {
+   grokAuthMethodId,
+   grokEffort,
+   grokPromptBlocks,
++  grokSessionNewFallbackParams,
+   grokSessionNewParams,
+   grokSpawnArgs,
++  modelsFromInitialize,
++  modelsFromSessionNew,
+   permissionOptionId,
+   permissionRequestFromAcp,
+   pickAutoOption,
+   planFromExitPlan,
++  resolveGrokAcpModelId,
+   sessionIdFromResult,
++  shouldRetrySessionNewWithoutMeta,
+ } from "./grokProtocol";
+ import type {
+   ApprovalDecision,
+@@ -120,8 +127,9 @@ export async function sendGrokTurn(input: SendTurnInput): Promise<void> {
+ export async function compactGrokContext(
+   input: CompactContextInput,
+ ): Promise<void> {
++  const cwd = assertGrokWorkspaceCwd(input.cwd, await homeDir());
+   let live = liveByThread.get(input.sessionId);
+-  if (!live || live.cwd !== input.cwd) {
++  if (!live || live.cwd !== cwd) {
+     live = await ensureLive(input);
+   }
+   if (cancelledThreads.delete(input.sessionId)) return;
+@@ -216,12 +224,13 @@ export function bindGrokSession(
+ }
+ 
+ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
++  const cwd = assertGrokWorkspaceCwd(input.cwd, await homeDir());
+   const wantPlanning = input.intent === "plan";
+   const wantFullAccess = input.runtimeMode === "full-access" && !wantPlanning;
+   const existing = liveByThread.get(input.sessionId);
+   if (
+     existing &&
+-    existing.cwd === input.cwd &&
++    existing.cwd === cwd &&
+     existing.fullAccess === wantFullAccess &&
+     existing.planning === wantPlanning
+   ) {
+@@ -234,11 +243,10 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+   }
+ 
+   const resume = resumeByThread.get(input.sessionId);
+-  const canLoad = resume != null && resume.cwd === input.cwd;
+-  if (resume && resume.cwd !== input.cwd) {
++  const canLoad = resume != null && resume.cwd === cwd;
++  if (resume && resume.cwd !== cwd) {
+     resumeByThread.delete(input.sessionId);
+   }
+-
+   const { path } = await resolveGrokBinary();
+   const handlers: AcpHandlers = {};
+   const acp = new AcpClient(input.sessionId, handlers);
+@@ -292,12 +300,12 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+     input.sessionId,
+     path,
+     grokSpawnArgs({
+-      model: input.model,
++      model: resolveGrokAcpModelId(input.model),
+       effort: grokEffort(input.modelSettings),
+       fullAccess: wantFullAccess,
+       plan: wantPlanning,
+     }),
+-    input.cwd,
++    cwd,
+   );
+ 
+   try {
+@@ -349,7 +357,7 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+             "session/load",
+             {
+               sessionId: resume.acpSessionId,
+-              cwd: input.cwd,
++              cwd,
+               mcpServers: [],
+             },
+             SESSION_TIMEOUT_MS,
+@@ -367,14 +375,27 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+     }
+ 
+     if (!acpSessionId) {
++      const created = grokSessionNewParams(cwd, input.runtimeMode);
+       try {
+         setup = await acp.request(
+           "session/new",
+-          grokSessionNewParams(input.cwd, input.runtimeMode),
++          created,
+           SESSION_TIMEOUT_MS,
+         );
+       } catch (error) {
+-        throw grokAuthError(error);
++        if (shouldRetrySessionNewWithoutMeta(error, created)) {
++          try {
++            setup = await acp.request(
++              "session/new",
++              grokSessionNewFallbackParams(cwd),
++              SESSION_TIMEOUT_MS,
++            );
++          } catch (retryError) {
++            throw grokAuthError(retryError);
++          }
++        } else {
++          throw grokAuthError(error);
++        }
+       }
+       acpSessionId = sessionIdFromResult(setup);
+     }
+@@ -385,8 +406,18 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+       subagents: new AcpSubagents(),
+       acp,
+       acpSessionId,
+-      cwd: input.cwd,
+-      modelId: currentModelId(setup) ?? nativeModelId(input.model),
++      cwd,
++      modelId:
++        currentModelId(setup) ??
++        resolveGrokAcpModelId(
++          input.model,
++          modelsFromSessionNew(setup)
++            .concat(modelsFromInitialize(init))
++            .map((model) => model.nativeId)
++            .filter((id): id is string => Boolean(id)),
++          currentModelId(setup),
++        ) ??
++        nativeModelId(input.model),
+       contextWindow:
+         contextWindowFromSetup(setup) ?? contextWindowFromSetup(init),
+       muteUpdates: didLoad,
+@@ -403,7 +434,7 @@ async function ensureLive(input: HarnessSessionInput): Promise<Live> {
+     liveByThread.set(input.sessionId, live);
+     resumeByThread.set(input.sessionId, {
+       acpSessionId,
+-      cwd: input.cwd,
++      cwd,
+     });
+     live.onEvent({
+       type: "session.providerBound",
+@@ -422,7 +453,8 @@ async function applyModelSelection(
+   live: Live,
+   input: HarnessSessionInput,
+ ): Promise<void> {
+-  const base = nativeModelId(input.model);
++  const available = live.modelId ? [live.modelId] : [];
++  const base = resolveGrokAcpModelId(input.model, available, live.modelId);
+   if (base && base !== live.modelId) {
+     await live.acp
+       .request(
+diff --git a/src/integrations/harness/providers/grok/grokLive.test.ts b/src/integrations/harness/providers/grok/grokLive.test.ts
+index 6aba7f1..5f50574 100644
+--- a/src/integrations/harness/providers/grok/grokLive.test.ts
++++ b/src/integrations/harness/providers/grok/grokLive.test.ts
+@@ -22,6 +22,10 @@ vi.mock("../../core/child", () => ({
+   },
+ }));
+ 
++vi.mock("../../../../platform/tauri/fs", () => ({
++  homeDir: async () => "/Users/me",
++}));
++
+ const {
+   compactGrokContext,
+   sendGrokTurn,
+@@ -88,6 +92,32 @@ describe("grok live turn sequence", () => {
+     sent.length = 0;
+   });
+ 
++  it("expands ~ to an absolute cwd before session/new", async () => {
++    const turn = sendGrokTurn({
++      sessionId: "t-home",
++      cwd: "~",
++      model: "grok-build",
++      runtimeMode: "full-access",
++      text: "hey",
++      attachments: [],
++      onEvent: () => undefined,
++    });
++    await handshake();
++    const created = parse().find((m) => m.method === "session/new")!;
++    expect(created.params.cwd).toBe("/Users/me");
++    expect(created.params.mcpServers).toEqual([]);
++    await waitFor(
++      () => parse().some((m) => m.method === "session/prompt"),
++      "prompt",
++    );
++    reply(parse().find((m) => m.method === "session/prompt")!.id, {
++      stopReason: "end_turn",
++    });
++    await turn;
++    expect(parse().some((m) => m.method === "session/set_model")).toBe(false);
++    await stopGrokSession("t-home");
++  });
++
+   it("authenticates, selects the model, and prompts", async () => {
+     const events: HarnessEvent[] = [];
+     const turn = sendGrokTurn({
+diff --git a/src/integrations/harness/providers/grok/grokProtocol.test.ts b/src/integrations/harness/providers/grok/grokProtocol.test.ts
+index 92dc317..a29246e 100644
+--- a/src/integrations/harness/providers/grok/grokProtocol.test.ts
++++ b/src/integrations/harness/providers/grok/grokProtocol.test.ts
+@@ -2,11 +2,14 @@ import { describe, expect, it } from "vitest";
+ import {
+   askQuestionResponse,
+   askQuestionsFromAcp,
++  assertGrokWorkspaceCwd,
+   eventsFromAcpUpdate,
+   fallbackGrokModels,
++  grokAuthError,
+   grokAuthMethodId,
+   grokEffort,
+   grokPromptBlocks,
++  grokSessionNewFallbackParams,
+   grokSessionNewParams,
+   grokSpawnArgs,
+   grokTextSpawnArgs,
+@@ -17,7 +20,10 @@ import {
+   permissionRequestFromAcp,
+   pickAutoOption,
+   planFromExitPlan,
++  resolveGrokAcpModelId,
++  resolveGrokWorkspaceCwd,
+   sessionIdFromResult,
++  shouldRetrySessionNewWithoutMeta,
+ } from "./grokProtocol";
+ import { harnessSupportsAttachments } from "../../../../features/sessions/model/session";
+ 
+@@ -96,6 +102,40 @@ describe("grok protocol", () => {
+     });
+   });
+ 
++  it("expands ~ so session/new gets an absolute cwd", () => {
++    expect(resolveGrokWorkspaceCwd("~", "/Users/me")).toBe("/Users/me");
++    expect(resolveGrokWorkspaceCwd("~/code", "/Users/me")).toBe(
++      "/Users/me/code",
++    );
++    expect(assertGrokWorkspaceCwd("~", "/Users/me")).toBe("/Users/me");
++    expect(() => assertGrokWorkspaceCwd("~", "")).toThrow(
++      /Open a project folder first/,
++    );
++  });
++
++  it("maps grok-build onto a live ACP model id", () => {
++    expect(
++      resolveGrokAcpModelId("grok-build", ["grok-4.6", "grok-4.5"], "grok-4.6"),
++    ).toBe("grok-4.6");
++    expect(resolveGrokAcpModelId("grok:grok-4.6", ["grok-4.6"])).toBe(
++      "grok-4.6",
++    );
++  });
++
++  it("retries session/new without _meta after Invalid params", () => {
++    const created = grokSessionNewParams("/repo", "full-access");
++    expect(
++      shouldRetrySessionNewWithoutMeta(new Error("Invalid params"), created),
++    ).toBe(true);
++    expect(grokSessionNewFallbackParams("/repo")).toEqual({
++      cwd: "/repo",
++      mcpServers: [],
++    });
++    expect(grokAuthError(new Error("Invalid params")).message).toMatch(
++      /Open a project folder first/,
++    );
++  });
++
+   it("never authenticates with the browser grok.com method", () => {
+     expect(
+       grokAuthMethodId({
+diff --git a/src/integrations/harness/providers/grok/grokProtocol.ts b/src/integrations/harness/providers/grok/grokProtocol.ts
+index bb231c5..e6f77f8 100644
+--- a/src/integrations/harness/providers/grok/grokProtocol.ts
++++ b/src/integrations/harness/providers/grok/grokProtocol.ts
+@@ -19,6 +19,9 @@ export const AUTH_HELP =
+ 
+ export const TEXT_MODEL = "grok-4.6";
+ 
++/** Product names the Grok CLI advertises that `session/set_model` rejects. */
++const GROK_PRODUCT_MODEL_IDS = new Set(["grok-build", "grok"]);
++
+ const VARIANT_KIND: Record<string, string> = {
+   readfile: "read",
+   read: "read",
+@@ -132,6 +135,78 @@ export function grokSessionNewParams(
+   return params;
+ }
+ 
++export function grokSessionNewFallbackParams(
++  cwd: string,
++): Record<string, unknown> {
++  return { cwd, mcpServers: [] };
++}
++
++/**
++ * MonoCode's empty-project sentinel is "~". Grok ACP `session/new` requires an
++ * absolute cwd, so passing "~" comes back as JSON-RPC -32602 Invalid params.
++ */
++export function resolveGrokWorkspaceCwd(cwd: string, home: string): string {
++  const trimmed = cwd.trim();
++  const root = home.replace(/[\\/]+$/, "");
++  if (!trimmed || trimmed === "~") return root;
++  if (trimmed === "~/" || trimmed.startsWith("~/")) {
++    const rest = trimmed.slice(2).replace(/[\\/]+$/, "");
++    return rest ? `${root}/${rest}` : root;
++  }
++  return trimmed;
++}
++
++export function isAbsoluteWorkspaceCwd(cwd: string): boolean {
++  const value = cwd.trim();
++  return (
++    value.startsWith("/") ||
++    /^[A-Za-z]:[\\/]/.test(value) ||
++    value.startsWith("\\\\")
++  );
++}
++
++export function grokMissingProjectMessage(cwd: string): string {
++  return `Grok Build did not start. Invalid params.\n\nOpen a project folder first. Grok ACP session/new needs an absolute working directory, not "${cwd || "~"}".`;
++}
++
++export function assertGrokWorkspaceCwd(cwd: string, home: string): string {
++  const resolved = resolveGrokWorkspaceCwd(cwd, home);
++  if (!isAbsoluteWorkspaceCwd(resolved)) {
++    throw new Error(grokMissingProjectMessage(cwd));
++  }
++  return resolved;
++}
++
++/**
++ * `grok-build` is the CLI product name, not a live ACP model id. Map it onto
++ * the current session model (`grok-4.6` / `grok-4.5`) before `session/set_model`.
++ */
++export function resolveGrokAcpModelId(
++  requested: string,
++  available: string[] = [],
++  current?: string,
++): string {
++  const native = nativeId(requested);
++  const catalog = available.filter(Boolean);
++  const pickCurrent =
++    current && catalog.includes(current) ? current : (catalog[0] ?? current ?? "");
++  if (!native || GROK_PRODUCT_MODEL_IDS.has(native)) return pickCurrent;
++  if (catalog.length === 0 || catalog.includes(native)) return native;
++  return pickCurrent;
++}
++
++export function isInvalidParamsError(error: unknown): boolean {
++  const detail = error instanceof Error ? error.message : String(error ?? "");
++  return /invalid params|unknown model id|-32602/i.test(detail);
++}
++
++export function shouldRetrySessionNewWithoutMeta(
++  error: unknown,
++  params: Record<string, unknown>,
++): boolean {
++  return isInvalidParamsError(error) && params._meta != null;
++}
++
+ export function grokEffort(
+   settings?: Record<string, string>,
+ ): string | undefined {
+@@ -174,6 +249,11 @@ export function grokAuthError(error: unknown): Error {
+   if (/timed out/i.test(detail)) {
+     return new Error(`Grok Build did not start. ${AUTH_HELP}`);
+   }
++  if (isInvalidParamsError(error)) {
++    return new Error(
++      `Grok Build did not start. Invalid params.\n\nOpen a project folder first. Grok ACP session/new needs an absolute working directory, not "~". If a project is already open, pick Grok 4.6 (not the product slug grok-build).`,
++    );
++  }
+   return new Error(`Grok Build did not start. ${detail}`);
+ }
+ 
